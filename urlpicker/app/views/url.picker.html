@@ -1,27 +1,27 @@
 <div ng-controller="UrlPickerController" class="url-picker">
   
 	<ul class="nav nav-tabs">
-		<li ng-class="{active : model.value.type == 'url'}">
+		<li ng-class="{active : renderModel.type == 'url'}">
 			<a ng-click="switchType('url')" href="#" prevent-default>URL</a>
 		</li>
-		<li ng-class="{active : model.value.type == 'content'}">
+		<li ng-class="{active : renderModel.type == 'content'}">
 			<a ng-click="switchType('content')" href="#" prevent-default>Content</a>
 		</li>
-		<li ng-class="{active: model.value.type == 'media'}">
+		<li ng-class="{active: renderModel.type == 'media'}">
 			<a ng-click="switchType('media')" href="#" prevent-default>Media</a>
 		</li>
 	</ul>
 
 	<div class="tab-body">
-		<div ng-show="model.value.type == 'url'">
-			<input type="text" ng-model="model.value.typeData.url"/>
+		<div ng-show="renderModel.type == 'url'">
+			<input type="text" ng-model="renderModel.typeData.url"/>
 		</div>
-		<div ng-show="model.value.type == 'content'">
+		<div ng-show="renderModel.type == 'content'">
 			<a ng-click="openTreePicker('content')" prevent-default>Select...</a>
 			{{model.value.typeData.contentId}}
-			<label></label>
+			aa
 		</div>
-		<div ng-show="model.value.type == 'media'">
+		<div ng-show="renderModel.type == 'media'">
 			<a ng-click="openTreePicker('media')" prevent-default>Select...</a>
 			<label></label>
 		</div>

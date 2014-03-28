@@ -13,7 +13,7 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
   };*/
 
   $scope.switchType = function(type) {
-  	$scope.model.value.type = type;
+  	$scope.renderModel.type = type;
   }
 
   $scope.openTreePicker = function (type) {
@@ -27,5 +27,14 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
   		}
   	});
   }
+
+  // Setup "render model" & defaults
+  $scope.renderModel = $scope.model.value || { "type": "url" };
+  $scope.$on("formSubmitting", function (ev, args) {
+    delete $scope.renderModel.typeData.contentName;
+    delete $scope.renderModel.typeData.mediaName;
+    $scope.model.value = $scope.renderModel;
+  });
+
 });
 
