@@ -2,38 +2,39 @@
 
 	<div class="link-meta">
 		<div class="row control-group">
-			<label>Title</label> <input type="text" ng-model="renderModel.meta.title" />
-		</div>
-		<div class="row control-group">
-			<label>Open in new window?</label> <input type="checkbox" ng-model="renderModel.meta.newWindow" /> 
+			<label for="urlPickerTitle">Title</label> <input id="urlPickerTitle" type="text" ng-model="model.value.meta.title" />
 		</div>
 	</div>
 
-
 	<ul class="nav nav-tabs">
-		<li ng-class="{active : renderModel.type == 'url'}">
+		<li ng-class="{active : model.value.type == 'url'}">
 			<a ng-click="switchType('url')" href="#" prevent-default>URL</a>
 		</li>
-		<li ng-class="{active : renderModel.type == 'content'}">
+		<li ng-class="{active : model.value.type == 'content'}">
 			<a ng-click="switchType('content')" href="#" prevent-default>Content</a>
 		</li>
-		<li ng-class="{active: renderModel.type == 'media'}">
+		<li ng-class="{active: model.value.type == 'media'}">
 			<a ng-click="switchType('media')" href="#" prevent-default>Media</a>
 		</li>
 	</ul>
 
 	<div class="tab-body">
-		<div ng-show="renderModel.type == 'url'">
-			<input type="text" ng-model="renderModel.typeData.url"/>
+		<div ng-show="model.value.type == 'url'">
+			<input type="text" ng-model="model.value.typeData.url"/>
 		</div>
-		<div ng-show="renderModel.type == 'content'">
-			<a ng-click="openTreePicker('content')" prevent-default>Select...</a>
-			{{model.value.typeData.contentId}}
-			aa
+		<div ng-show="model.value.type == 'content'">
+			<a ng-click="openTreePicker('content')" prevent-default>Select…</a>
+			{{contentName}}
 		</div>
-		<div ng-show="renderModel.type == 'media'">
-			<a ng-click="openTreePicker('media')" prevent-default>Select...</a>
-			<label></label>
+		<div ng-show="model.value.type == 'media'">
+			<a ng-click="openTreePicker('media')" prevent-default>Select…</a>
+			{{mediaName}}
+		</div>
+	</div>
+
+	<div class="link-meta">
+		<div class="row control-group">
+			<label>Open in new window?</label> <input type="checkbox" ng-model="model.value.meta.newWindow" /> 
 		</div>
 	</div>
 

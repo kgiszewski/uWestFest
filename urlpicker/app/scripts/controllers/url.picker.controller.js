@@ -1,4 +1,4 @@
-angular.module('umbraco').controller('UrlPickerController', function($scope, dialogService) {
+angular.module('umbraco').controller('UrlPickerController', function($scope, dialogService, entityResource) {
 /*  $scope.model.value = {
   	"type" : "content",
   	"meta" : {
@@ -11,9 +11,12 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
   		"mediaId" : 1052
   	}
   };*/
+  //$scope.model.value = "";
+
+  init();
 
   $scope.switchType = function(type) {
-  	$scope.renderModel.type = type;
+  	$scope.model.value.type = type;
   }
 
   $scope.openTreePicker = function (type) {
@@ -23,18 +26,38 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
   		scope: $scope,
   		multiPicker: false,
   		callback: function(data) {
-  			$scope.model.value.typeData.contentId = data.id
+        if(type == "content") {
+          $scope.model.value.typeData.contentId = data.id;
+    			$scope.contentName = getEntityName(data.id, "Document");
+        } 
+        else {
+          $scope.model.value.typeData.mediaId = data.id;
+          $scope.mediaName = getEntityName(data.id, "Media");
+        }
   		}
   	});
   }
 
+  function getEntityName(id, typeAlias) {
+    if(!id) {
+      return "";
+    }
+
+    return entityResource.getById(id, typeAlias).then(function(entity) {
+      return entity.name;
+    });
+  }
+
   // Setup "render model" & defaults
-  $scope.renderModel = $scope.model.value || { "type": "url" };
-  $scope.$on("formSubmitting", function (ev, args) {
-    delete $scope.renderModel.typeData.contentName;
-    delete $scope.renderModel.typeData.mediaName;
-    $scope.model.value = $scope.renderModel;
-  });
+  function init() {
+    $scope.model.value = $scope.model.value || { "type": "url", "meta" : { "title" : "", "newWindow" : true },"typeData": {"url" : "", "contentId" : null, "mediaId" : null} };
 
+    if($scope.model.value.typeData.contentId) {
+      $scope.contentName = getEntityName($scope.model.value.typeData.contentId, "Document");
+    }
+
+    if($scope.model.value.typeData.mediaId) {
+      $scope.mediaName =  getEntityName($scope.model.value.typeData.mediaId, "Media");
+    }
+  }
 });
-
