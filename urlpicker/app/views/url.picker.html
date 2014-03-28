@@ -1,5 +1,15 @@
 <div ng-controller="UrlPickerController" class="url-picker">
-  
+
+	<div class="link-meta">
+		<div class="row control-group">
+			<label>Title</label> <input type="text" ng-model="renderModel.meta.title" />
+		</div>
+		<div class="row control-group">
+			<label>Open in new window?</label> <input type="checkbox" ng-model="renderModel.meta.newWindow" /> 
+		</div>
+	</div>
+
+
 	<ul class="nav nav-tabs">
 		<li ng-class="{active : renderModel.type == 'url'}">
 			<a ng-click="switchType('url')" href="#" prevent-default>URL</a>
