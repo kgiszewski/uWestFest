@@ -4,6 +4,9 @@
 		<div class="row control-group">
 			<label for="urlPickerTitle">Title</label> <input id="urlPickerTitle" type="text" ng-model="model.value.meta.title" />
 		</div>
+		<div class="row control-group">
+			<label>Open in new window?</label> <input type="checkbox" ng-model="model.value.meta.newWindow" /> 
+		</div>
 	</div>
 
 	<ul class="nav nav-tabs">
@@ -29,12 +32,6 @@
 		<div ng-show="model.value.type == 'media'">
 			<a ng-click="openTreePicker('media')" prevent-default>Select…</a>
 			{{mediaName}}
-		</div>
-	</div>
-
-	<div class="link-meta">
-		<div class="row control-group">
-			<label>Open in new window?</label> <input type="checkbox" ng-model="model.value.meta.newWindow" /> 
 		</div>
 	</div>
 
