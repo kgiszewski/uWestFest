@@ -2,19 +2,13 @@
   "propertyEditors": [
     {
       "name": "Url Picker",
-      "alias": "UrlPicker",
+      "alias": "Imulus.UrlPicker",
       "editor": {
         "valueType": "JSON",
         "view": "~/App_Plugins/UrlPicker/views/url.picker.html"
       },
       "prevalues": {
         "fields": [
-          {
-            "description": "This is an example prevalue",
-            "key": "examplePreValue",
-            "label": "Example PreValue",
-            "view": "textstring"
-          }
         ]
       }
     }
