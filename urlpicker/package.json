@@ -1,13 +1,14 @@
 {
   "name": "UrlPicker",
-  "version": "0.0.0",
+  "version": "0.9.1",
   "description": "Url Picker Property Editor from uWestFest",
   "license": "MIT",
   "author": {
     "name": "Kevin Giszewski",
     "email": "",
-    "url": ""
+    "url": "https://github.com/imulus/"
   },
+  "url": "https://github.com/imulus/uWestFest/tree/master/urlpicker",
   "devDependencies": {
     "grunt": "~0.4.2",
     "load-grunt-tasks": "~0.3.0",
