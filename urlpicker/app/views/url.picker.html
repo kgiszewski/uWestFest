@@ -23,15 +23,17 @@
 
 	<div class="tab-body">
 		<div ng-show="model.value.type == 'url'">
-			<input type="text" ng-model="model.value.typeData.url"/>
+			<input type="text" ng-model="model.value.typeData.url"/><a href class="delete-icon" ng-click="resetType('url')"><i class="icon icon-delete"></i></a>
 		</div>
 		<div ng-show="model.value.type == 'content'">
 			<a ng-click="openTreePicker('content')" prevent-default>Select…</a>
 			{{contentName}}
+			<a href class="delete-icon" ng-click="resetType('content')"><i class="icon icon-delete"></i></a>
 		</div>
 		<div ng-show="model.value.type == 'media'">
 			<a ng-click="openTreePicker('media')" prevent-default>Select…</a>
 			{{mediaName}}
+            <a href class="delete-icon" ng-click="resetType('media')"><i class="icon icon-delete"></i></a>
 		</div>
 	</div>
 

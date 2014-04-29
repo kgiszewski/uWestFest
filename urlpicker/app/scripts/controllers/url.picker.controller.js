@@ -16,7 +16,19 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
   init();
 
   $scope.switchType = function(type) {
-  	$scope.model.value.type = type;
+      $scope.model.value.type = type;
+  }
+
+  $scope.resetType = function (type) {
+      if (type == "content") {
+          $scope.model.value.typeData.contentId = null;
+          $scope.contentName = "";
+      } else if (type == "media") {
+          $scope.model.value.typeData.mediaId = null;
+          $scope.mediaName = "";
+      } else {
+          $scope.model.value.typeData.url = "";
+      }
   }
 
   $scope.openTreePicker = function (type) {
