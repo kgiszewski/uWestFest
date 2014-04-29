@@ -24,6 +24,7 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
   		section: type,
   		treeAlias: type,
   		scope: $scope,
+  	    startNodeId: getStartNodeId(type),
   		multiPicker: false,
   		callback: function(data) {
         if(type == "content") {
@@ -38,6 +39,14 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
   	});
   }
 
+  function getStartNodeId(type) {
+      if (type == "content") {
+          return $scope.model.config.contentStartNode
+      } else {
+          return $scope.model.config.mediaStartNode
+      }
+  }
+
   function getEntityName(id, typeAlias) {
     if(!id) {
       return "";
@@ -50,6 +59,13 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
 
   // Setup "render model" & defaults
   function init() {
+
+    if (!$scope.model.config.contentStartNode)
+        $scope.model.config.contentStartNode = -1;
+
+    if (!$scope.model.config.mediaStartNode)
+        $scope.model.config.mediaStartNode = -1;
+
     $scope.model.value = $scope.model.value || { "type": "url", "meta" : { "title" : "", "newWindow" : true },"typeData": {"url" : "", "contentId" : null, "mediaId" : null} };
 
     if($scope.model.value.typeData.contentId) {

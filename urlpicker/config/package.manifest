@@ -9,6 +9,18 @@
       },
       "prevalues": {
         "fields": [
+			{
+				label: "Content start node",
+				description: "Choose the content start node",
+				key: "contentStartNode",
+				view: "treepicker"
+			},
+			{
+				label: "Media start node",
+				description: "Choose the media start node",
+				key: "mediaStartNode",
+				view: "mediapicker"
+			}
         ]
       }
     }
