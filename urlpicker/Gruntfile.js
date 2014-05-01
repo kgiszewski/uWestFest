@@ -1,7 +1,5 @@
 module.exports = function(grunt) {
   require('load-grunt-tasks')(grunt);
-
-  // Add in time grunt
   require('time-grunt')(grunt);
 
   grunt.initConfig({
@@ -136,57 +134,9 @@ module.exports = function(grunt) {
     }
   });
 
-  //Legacy - now below so we can run our validation check first...
-  //grunt.registerTask('default', ['concat', 'less', 'copy:config', 'copy:views']);
-  //grunt.registerTask('nuget', ['clean', 'default', 'copy:nuget', 'template:nuspec', 'mkdir:pkg', 'nugetpack']);
-  //grunt.registerTask('umbraco', ['clean', 'default', 'copy:umbraco', 'mkdir:pkg', 'umbracoPackage']);
-
-  //TASK: default
-  grunt.registerTask('default', 'Concat files, build Less & copy config & views', function(){
-    validateTarget();
-    grunt.task.run(['concat', 'less', 'copy:config', 'copy:views']);
-  });
-
-  //TASK nuget
-  grunt.registerTask('nuget', 'Clean, rebuild, copy files for nuget & create it', function(){
-    validateTarget();
-    grunt.task.run(['clean', 'default', 'copy:nuget', 'template:nuspec', 'mkdir:pkg', 'nugetpack']);
-  });
-
-
-  //TASK umbraco
-  grunt.registerTask('umbraco', 'Clean, rebuild, copy files for umbraco package & create it', function(){
-    validateTarget();
-    grunt.task.run(['clean', 'default', 'copy:umbraco', 'mkdir:pkg', 'umbracoPackage']);
-  });
-
-
-  
-  //Validation for --target option
-  function validateTarget() {
-
-    var destTarget = grunt.config.get('dest');
-
-    //Debug
-    grunt.log.oklns('Target (dest) is: ' + destTarget);
-
-    //If dest is not set to dist then a target option was set
-    if(destTarget != 'dist') {
-
-      //Happens when grunt --target is called
-      if(destTarget === true) {
-        //Error message & stop processing task
-        grunt.fail.warn('You need to specify a folder for target: grunt --target=c:/mysite/');
-      }
-
-      //Ensure that the dest value the --target is actually a directory that exists
-      if(!grunt.file.isDir(destTarget)){
-
-        //Error message & stop processing task
-        grunt.fail.warn('The target passed in is not a folder path.');
-      }
-    }
-  }
+  grunt.registerTask('default', ['concat', 'less', 'copy:config', 'copy:views']);
+  grunt.registerTask('nuget', ['clean', 'default', 'copy:nuget', 'template:nuspec', 'mkdir:pkg', 'nugetpack']);
+  grunt.registerTask('package', ['clean', 'default', 'copy:umbraco', 'mkdir:pkg', 'umbracoPackage']);
 
 };
 
