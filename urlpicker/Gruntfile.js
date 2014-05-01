@@ -54,6 +54,20 @@ module.exports = function(grunt) {
       }
     },
 
+    msbuild: {
+      options: {
+        stdout: true,
+        verbosity: 'quiet',
+      },
+      dist: {
+        src: ['src/UrlPicker.Umbraco/UrlPicker.Umbraco.csproj'],
+        options: {
+          projectConfiguration: 'Debug',
+          targets: ['Clean', 'Rebuild']
+        }
+      }
+    },
+
     copy: {
       config: {
         src: 'config/package.manifest',
@@ -65,6 +79,14 @@ module.exports = function(grunt) {
         cwd: 'app/views/',
         src: '**',
         dest: '<%= dest %>/<%= basePath %>/views/'
+      },
+
+      dll: {
+        expand: true,
+        flatten: true,
+        cwd: 'src/UrlPicker.Umbraco/bin/Debug/',
+        src: '**',
+        dest: '<%= dest %>/bin/'
       },
 
       nuget: {
@@ -134,7 +156,7 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('default', ['concat', 'less', 'copy:config', 'copy:views']);
+  grunt.registerTask('default', ['concat', 'less', 'copy:config', 'copy:views', 'copy:dll', 'msbuild:dist']);
   grunt.registerTask('nuget', ['clean', 'default', 'copy:nuget', 'template:nuspec', 'mkdir:pkg', 'nugetpack']);
   grunt.registerTask('package', ['clean', 'default', 'copy:umbraco', 'mkdir:pkg', 'umbracoPackage']);
 
