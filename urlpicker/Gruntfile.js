@@ -142,7 +142,7 @@ module.exports = function(grunt) {
         url:         '<%= pkg.url %>',
         license:     '<%= pkg.license %>',
         licenseUrl:  '<%= pkg.licenseUrl %>',
-        author:      '<%= pkg.author.name %>',
+        author:      '<%= pkg.author.name %><% if (pkg.contributors) { %>, <%= pkg.contributors.map(function(p) { return p.name; }).join(", ") %><% } %>',
         authorUrl:   '<%= pkg.author.url %>',
         manifest:    'config/package.xml',
         readme:      'config/readme.txt',

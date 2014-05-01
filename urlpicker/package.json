@@ -4,10 +4,27 @@
   "description": "Url Picker Property Editor from uWestFest",
   "license": "MIT",
   "author": {
-    "name": "Kevin Giszewski",
+    "name": "Imulus",
     "email": "",
     "url": "https://github.com/imulus/"
   },
+  "contributors": [
+    {
+      "name": "Kevin Giszewski",
+      "email": "",
+      "url": "https://github.com/kgiszewski"
+    },
+    {
+      "name": "Tom Fulton",
+      "email": "",
+      "url": "https://github.com/tomfulton"
+    },
+    {
+      "name": "Jeavon",
+      "email": "",
+      "url": "https://github.com/Jeavon"
+    }
+  ],
   "url": "https://github.com/imulus/uWestFest/tree/master/urlpicker",
   "devDependencies": {
     "grunt": "~0.4.2",
