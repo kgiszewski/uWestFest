@@ -1,10 +1,10 @@
 <div ng-controller="UrlPickerController" class="url-picker">
 
 	<div class="link-meta">
-		<div class="row control-group">
+		<div class="row control-group" ng-hide="model.config.hideTitle">
 			<label for="urlPickerTitle">Title</label> <input id="urlPickerTitle" type="text" ng-model="model.value.meta.title" />
 		</div>
-		<div class="row control-group">
+		<div class="row control-group" ng-hide="model.config.hideOpenNew">
 			<label>Open in new window?</label> <input type="checkbox" ng-model="model.value.meta.newWindow" /> 
 		</div>
 	</div>

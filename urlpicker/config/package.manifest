@@ -20,7 +20,19 @@
 				description: "Choose the media start node",
 				key: "mediaStartNode",
 				view: "mediapicker"
-			}
+			},
+      {
+        label: "Hide Title",
+        description: "Hides the title field",
+        key: "hideTitle",
+        view: "boolean"
+      },
+      {
+        label: "Hide 'Open in New Browser'",
+        description: "Hides the 'Open in New Browser' option",
+        key: "hideOpenNew",
+        view: "boolean"
+      }
         ]
       }
     }

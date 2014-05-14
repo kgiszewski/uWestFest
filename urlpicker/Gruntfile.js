@@ -58,6 +58,7 @@ module.exports = function(grunt) {
       options: {
         stdout: true,
         verbosity: 'quiet',
+        version: 4
       },
       dist: {
         src: ['src/UrlPicker.Umbraco/UrlPicker.Umbraco.csproj'],

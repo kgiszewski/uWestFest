@@ -1,17 +1,4 @@
 angular.module('umbraco').controller('UrlPickerController', function($scope, dialogService, entityResource) {
-/*  $scope.model.value = {
-  	"type" : "content",
-  	"meta" : {
-  		"title" : "My awesome title",
-  		"newWindow" : true
-  	},
-  	"typeData": {
-  		"url" : "http://google.com",
-  		"contentId" : 1051,
-  		"mediaId" : 1052
-  	}
-  };*/
-  //$scope.model.value = "";
 
   init();
 
