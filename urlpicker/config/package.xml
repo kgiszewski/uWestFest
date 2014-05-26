@@ -7,9 +7,9 @@
       <license url="<%= licenseUrl %>"><%= license %></license>
       <url><%= url %></url>
       <requirements>
-        <major>0</major>
-        <minor>0</minor>
-        <patch>0</patch>
+        <major>7</major>
+        <minor>1</minor>
+        <patch>3</patch>
       </requirements>
     </package>
     <author>

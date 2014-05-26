@@ -22,7 +22,6 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
   	var ds = dialogService.treePicker({
   		section: type,
   		treeAlias: type,
-  		scope: $scope,
   	    startNodeId: getStartNodeId(type),
   		multiPicker: false,
   		callback: function(data) {
