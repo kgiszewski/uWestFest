@@ -90,11 +90,19 @@ module.exports = function(grunt) {
         dest: '<%= dest %>/bin/'
       },
 
-      nuget: {
+      nugetContent: {
         expand: true,
         cwd: '<%= dest %>',
-        src: '**',
+        src: ['**/*','!bin/**'],
         dest: 'tmp/nuget/content/'
+      },
+
+      nugetLib: {
+        expand: true,
+        cwd: '<%= dest %>',
+        src: 'bin/*.*',
+        dest: 'tmp/nuget/lib/net40/',
+        flatten: true
       },
 
       umbraco: {
@@ -158,7 +166,7 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('default', ['concat', 'less', 'copy:config', 'copy:views', 'copy:dll', 'msbuild:dist']);
-  grunt.registerTask('nuget', ['clean', 'default', 'copy:nuget', 'template:nuspec', 'mkdir:pkg', 'nugetpack']);
+  grunt.registerTask('nuget', ['clean', 'default', 'copy:nugetContent', 'copy:nugetLib', 'template:nuspec', 'mkdir:pkg', 'nugetpack']);
   grunt.registerTask('package', ['clean', 'default', 'copy:umbraco', 'mkdir:pkg', 'umbracoPackage']);
 
 };
