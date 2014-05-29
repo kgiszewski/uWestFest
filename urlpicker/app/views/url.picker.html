@@ -10,13 +10,13 @@
 	</div>
 
 	<ul class="nav nav-tabs">
-		<li ng-class="{active : model.value.type == 'url'}">
+		<li ng-class="{active : model.value.type == 'url'}" ng-hide="model.config.hideUrl">
 			<a ng-click="switchType('url')" href="#" prevent-default>URL</a>
 		</li>
-		<li ng-class="{active : model.value.type == 'content'}">
+		<li ng-class="{active : model.value.type == 'content'}" ng-hide="model.config.hideContent">
 			<a ng-click="switchType('content')" href="#" prevent-default>Content</a>
 		</li>
-		<li ng-class="{active: model.value.type == 'media'}">
+		<li ng-class="{active: model.value.type == 'media'}" ng-hide="model.config.hideMedia">
 			<a ng-click="switchType('media')" href="#" prevent-default>Media</a>
 		</li>
 	</ul>

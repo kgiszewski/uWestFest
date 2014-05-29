@@ -65,7 +65,18 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
         $scope.model.config.mediaStartNode = -1;
 
     if (!$scope.model.value || !$scope.model.value.type) {
-        $scope.model.value = { "type": "url", "meta": { "title": "", "newWindow": true }, "typeData": { "url": "", "contentId": null, "mediaId": null } };
+      var defaultType = "content";
+
+      if($scope.model.config.hideContent == '1') {
+        if($scope.model.config.hideUrl == '0') {
+          defaultType = "url";
+        }
+        else {
+          defaultType = "media";
+        }
+      }
+
+      $scope.model.value = { "type": defaultType, "meta": { "title": "", "newWindow": false }, "typeData": { "url": "", "contentId": null, "mediaId": null } };
     }
     
     if ($scope.model.value.typeData && $scope.model.value.typeData.contentId) {
