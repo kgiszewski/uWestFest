@@ -50,6 +50,12 @@
             description: "Hides the 'URL' option",
             key: "hideUrl",
             view: "boolean"
+          },
+          {
+            label: "Default Type",
+            description: "Choose which type the picker defaults to.",
+            key: "defaultType",
+            view: "~/App_Plugins/UrlPicker/views/default.type.html"
           }
         ]
       }

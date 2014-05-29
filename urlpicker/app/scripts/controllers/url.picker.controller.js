@@ -67,13 +67,8 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
     if (!$scope.model.value || !$scope.model.value.type) {
       var defaultType = "content";
 
-      if($scope.model.config.hideContent == '1') {
-        if($scope.model.config.hideUrl == '0') {
-          defaultType = "url";
-        }
-        else {
-          defaultType = "media";
-        }
+      if($scope.model.config.defaultType) {
+        defaultType = $scope.model.config.defaultType;
       }
 
       $scope.model.value = { "type": defaultType, "meta": { "title": "", "newWindow": false }, "typeData": { "url": "", "contentId": null, "mediaId": null } };

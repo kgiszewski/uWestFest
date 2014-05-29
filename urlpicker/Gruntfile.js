@@ -10,7 +10,8 @@ module.exports = function(grunt) {
     concat: {
       dist: {
         src: [
-          'app/scripts/controllers/url.picker.controller.js'
+          'app/scripts/controllers/url.picker.controller.js',
+          'app/scripts/controllers/default.type.js'
         ],
         dest: '<%= dest %>/<%= basePath %>/js/url.picker.js',
         nonull: true
