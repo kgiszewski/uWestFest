@@ -64,7 +64,7 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
     if (!$scope.model.config.mediaStartNode)
         $scope.model.config.mediaStartNode = -1;
 
-    $scope.model.value = $scope.model.value || { "type": "url", "meta" : { "title" : "", "newWindow" : true },"typeData": {"url" : "", "contentId" : null, "mediaId" : null} };
+    $scope.model.value = $scope.model.value || { "type": "url", "meta" : { "title" : "", "newWindow" : false },"typeData": {"url" : "", "contentId" : null, "mediaId" : null} };
 
     if($scope.model.value.typeData.contentId) {
       $scope.contentName = getEntityName($scope.model.value.typeData.contentId, "Document");
