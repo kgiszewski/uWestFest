@@ -66,11 +66,11 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
 
     $scope.model.value = $scope.model.value || { "type": "url", "meta" : { "title" : "", "newWindow" : true },"typeData": {"url" : "", "contentId" : null, "mediaId" : null} };
 
-    if($scope.model.value.typeData.contentId) {
+    if ($scope.model.value.typeData && $scope.model.value.typeData.contentId) {
       $scope.contentName = getEntityName($scope.model.value.typeData.contentId, "Document");
     }
 
-    if($scope.model.value.typeData.mediaId) {
+    if ($scope.model.value.typeData && $scope.model.value.typeData.mediaId) {
       $scope.mediaName =  getEntityName($scope.model.value.typeData.mediaId, "Media");
     }
   }
