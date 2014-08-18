@@ -15,5 +15,13 @@ namespace UrlPicker.Umbraco.Extensions
             return input.StartsWith("{") && input.EndsWith("}")
                    || input.StartsWith("[") && input.EndsWith("]");
         }
+
+        public static string GetUrlPickerTarget(this UrlPicker.Umbraco.Models.UrlPicker picker)
+        {
+            if (picker == null)
+                return "";
+
+            return (picker.Meta.NewWindow) ? "_blank" : "";
+        }
     }
 }
