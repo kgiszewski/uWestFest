@@ -13,6 +13,7 @@ namespace UrlPicker.Umbraco.Models
         public TypeData TypeData { get; set;}
 
         public string Url { get; set; }
+        public string UrlAbsolute { get; set; }
         public string Name { get; set; }
         public enum UrlPickerTypes { Url, Content, Media };
     }
