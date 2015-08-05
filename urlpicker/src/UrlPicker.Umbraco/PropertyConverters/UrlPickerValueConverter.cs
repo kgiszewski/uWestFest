@@ -54,7 +54,7 @@ namespace UrlPicker.Umbraco.PropertyConverters
                             if (urlPicker.TypeData.Content != null)
                             {
                                 urlPicker.Url = urlPicker.TypeData.Content.Url;
-
+                                urlPicker.UrlAbsolute = urlPicker.TypeData.Content.UrlAbsolute();
                                 urlPicker.Name = (urlPicker.Meta.Title.IsNullOrWhiteSpace()) ? urlPicker.TypeData.Content.Name : urlPicker.Meta.Title;
                             }                         
                             break;
@@ -63,13 +63,14 @@ namespace UrlPicker.Umbraco.PropertyConverters
                             if (urlPicker.TypeData.Media != null)
                             {
                                 urlPicker.Url = urlPicker.TypeData.Media.Url;
-
+                                urlPicker.UrlAbsolute = urlPicker.TypeData.Media.UrlAbsolute();
                                 urlPicker.Name = (urlPicker.Meta.Title.IsNullOrWhiteSpace()) ? urlPicker.TypeData.Media.Name : urlPicker.Meta.Title;
                             }
                             break;
 
                         default:
                             urlPicker.Url = urlPicker.TypeData.Url;
+                            urlPicker.UrlAbsolute = urlPicker.TypeData.Url;
                             urlPicker.Name = (urlPicker.Meta.Title.IsNullOrWhiteSpace()) ? urlPicker.TypeData.Url : urlPicker.Meta.Title;
                             break;
                     }
