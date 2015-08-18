@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UrlPicker.Umbraco.Extensions
 {
@@ -16,7 +12,8 @@ namespace UrlPicker.Umbraco.Extensions
                    || input.StartsWith("[") && input.EndsWith("]");
         }
 
-        public static string GetUrlPickerTarget(this UrlPicker.Umbraco.Models.UrlPicker picker)
+        [Obsolete("You should use the property 'Target' instead.")]
+        public static string GetUrlPickerTarget(this Models.UrlPicker picker)
         {
             if (picker == null)
                 return "";
