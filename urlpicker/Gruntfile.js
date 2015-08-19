@@ -1,11 +1,12 @@
 module.exports = function(grunt) {
   require('load-grunt-tasks')(grunt);
-  require('time-grunt')(grunt);
+  var path = require('path')
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    pkgMeta: grunt.file.readJSON('config/meta.json'),
     dest: grunt.option('target') || 'dist',
-    basePath: 'App_Plugins/<%= pkg.name %>',
+    basePath: path.join('<%= dest %>', 'App_Plugins', '<%= pkgMeta.name %>'),
 
     concat: {
       dist: {
@@ -55,21 +56,6 @@ module.exports = function(grunt) {
       }
     },
 
-    msbuild: {
-      options: {
-        stdout: true,
-        verbosity: 'quiet',
-        version: 4
-      },
-      dist: {
-        src: ['src/UrlPicker.Umbraco/UrlPicker.Umbraco.csproj'],
-        options: {
-          projectConfiguration: 'Debug',
-          targets: ['Clean', 'Rebuild']
-        }
-      }
-    },
-
     copy: {
       config: {
         src: 'config/package.manifest',
@@ -114,61 +100,127 @@ module.exports = function(grunt) {
       }
     },
 
-    template: {
-      nuspec: {
-        options: {
-          data: {
-            name:        '<%= pkg.name %>',
-            version:     '<%= pkg.version %>',
-            author:      '<%= pkg.author.name %>',
-            description: '<%= pkg.description %>'
+    copy: {
+      app_plugins: {
+        cwd: 'src/UrlPicker.Umbraco/App_Plugins/UrlPicker',
+        src: ['**'],
+        dest: '<%= basePath %>',
+        expand: true
+      },
+      dll: {
+        cwd: 'src/UrlPicker.Umbraco/bin/Debug/',
+        src: 'UrlPicker.dll',
+        dest: '<%= dest %>/bin/',
+        expand: true
+      },
+      nuget: {
+        files: [
+          {
+            cwd: '<%= dest %>/App_Plugins',
+            src: ['**/*', '!bin', '!bin/*'],
+            dest: 'tmp/nuget/content/App_Plugins',
+            expand: true
+          },
+          {
+            cwd: '<%= dest %>/UrlPicker/',
+            src: ['**/*'],
+            dest: 'tmp/nuget/content/UrlPicker',
+            expand: true
+          },
+          {
+            cwd: '<%= dest %>/bin',
+            src: ['*.dll'],
+            dest: 'tmp/nuget/lib/net40',
+            expand: true
           }
-        },
-        files: {
-          'tmp/nuget/<%= pkg.name %>.nuspec': 'config/package.nuspec'
+        ]
+      },
+      umbraco: {
+        cwd: '<%= dest %>',
+        src: '**/*',
+        dest: 'tmp/umbraco',
+        expand: true
+      }
+    },
+    nugetpack: {
+        dist: {
+            src: 'tmp/nuget/package.nuspec',
+            dest: 'pkg'
+        }
+    },
+    template: {
+        'nuspec': {
+            'options': {
+                'data': { 
+                    name: '<%= pkgMeta.name %>',
+                    version: '<%= pkgMeta.version %>',
+                    url: '<%= pkgMeta.url %>',
+                    license: '<%= pkgMeta.license %>',
+                    licenseUrl: '<%= pkgMeta.licenseUrl %>',
+                    author: '<%= pkgMeta.author %>',
+                    authorUrl: '<%= pkgMeta.authorUrl %>',
+                    description: '<%= pkgMeta.description %>',
+                    files: [{ path: 'tmp/nuget/content/App_Plugins', target: 'content/App_Plugins'}]
+                }
+            },
+            'files': { 
+                'tmp/nuget/package.nuspec': ['config/package.nuspec']
+            }
+        }
+    },
+    umbracoPackage: {
+      options: {
+        name: "<%= pkgMeta.name %>",
+        version: '<%= pkgMeta.version %>',
+        url: '<%= pkgMeta.url %>',
+        license: '<%= pkgMeta.license %>',
+        licenseUrl: '<%= pkgMeta.licenseUrl %>',
+        author: '<%= pkgMeta.author %>',
+        authorUrl: '<%= pkgMeta.authorUrl %>',
+        manifest: 'config/package.xml',
+        readme: 'config/readme.txt',
+        sourceDir: 'tmp/umbraco',
+        outputDir: 'pkg',
+      }
+    },
+    clean: {
+      build: '<%= grunt.config("basePath").substring(0, 4) == "dist" ? "dist/**/*" : "null" %>',
+      tmp: ['tmp']
+    },
+    assemblyinfo: {
+      options: {
+        files: ['src/UrlPicker.Umbraco/UrlPicker.Umbraco.csproj'],
+        filename: 'AssemblyInfo.cs',
+        info: {
+          version: '<%= (pkgMeta.version.indexOf("-") ? pkgMeta.version.substring(0, pkgMeta.version.indexOf("-")) : pkgMeta.version) %>', 
+          fileVersion: '<%= pkgMeta.version %>'
         }
       }
     },
-
-    mkdir: {
-      pkg: {
-        options: {
-          create: ['pkg/nuget', 'pkg/umbraco']
-        },
-      },
-    },
-
-    nugetpack: {
-      dist: {
-        src: 'tmp/nuget/<%= pkg.name %>.nuspec',
-        dest: 'pkg/nuget/'
-      }
-    },
-
-    umbracoPackage: {
+    msbuild: {
       options: {
-        name:        '<%= pkg.name %>',
-        version:     '<%= pkg.version %>',
-        url:         '<%= pkg.url %>',
-        license:     '<%= pkg.license %>',
-        licenseUrl:  '<%= pkg.licenseUrl %>',
-        author:      '<%= pkg.author.name %><% if (pkg.contributors) { %>, <%= pkg.contributors.map(function(p) { return p.name; }).join(", ") %><% } %>',
-        authorUrl:   '<%= pkg.author.url %>',
-        manifest:    'config/package.xml',
-        readme:      'config/readme.txt',
-        sourceDir:   'tmp/umbraco',
-        outputDir:   'pkg/umbraco',
+        stdout: true,
+        verbosity: 'quiet',
+        maxCpuCount: 4,
+        version: 4.0,
+        buildParameters: {
+          WarningLevel: 2,
+          NoWarn: 1607
+        }
+      },
+      dist: {
+        src: ['src/UrlPicker.Umbraco/UrlPicker.Umbraco.csproj'],
+        options: {
+          projectConfiguration: 'Debug',
+          targets: ['Clean', 'Rebuild'],
+        }
       }
-    },
-
-    clean: {
-      dist: '<%= dest %>'
     }
   });
 
-  grunt.registerTask('default', ['concat', 'less', 'copy:config', 'copy:views', 'copy:dll', 'msbuild:dist']);
-  grunt.registerTask('nuget', ['clean', 'default', 'copy:nugetContent', 'copy:nugetLib', 'template:nuspec', 'mkdir:pkg', 'nugetpack']);
-  grunt.registerTask('package', ['clean', 'default', 'copy:umbraco', 'mkdir:pkg', 'umbracoPackage']);
-
+  grunt.registerTask('default', ['clean', 'assemblyinfo', 'msbuild:dist', 'copy:dll', 'copy:app_plugins']);
+  grunt.registerTask('nuget',   ['clean:tmp', 'default', 'copy:nuget', 'template:nuspec', 'nugetpack']);
+  grunt.registerTask('umbraco', ['clean:tmp', 'default', 'copy:umbraco', 'umbracoPackage']);
+  grunt.registerTask('package', ['clean:tmp', 'default', 'copy:nuget', 'template:nuspec', 'nugetpack', 'copy:umbraco', 'umbracoPackage', 'clean:tmp']);
 };
 

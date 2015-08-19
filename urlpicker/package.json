@@ -1,47 +1,34 @@
 {
   "name": "UrlPicker",
-  "version": "0.13.0",
-  "description": "Url Picker Property Editor from uWestFest",
-  "license": "MIT",
-  "repository": {
-    "private": true
-  },
-  "author": {
-    "name": "Imulus",
-    "email": "",
-    "url": "https://github.com/imulus/"
-  },
-  "contributors": [
-    {
-      "name": "Kevin Giszewski",
-      "email": "",
-      "url": "https://github.com/kgiszewski"
-    },
-    {
-      "name": "Tom Fulton",
-      "email": "",
-      "url": "https://github.com/tomfulton"
-    },
-    {
-      "name": "Jeavon Leopold",
-      "email": "",
-      "url": "https://github.com/Jeavon"
-    }
-  ],
-  "url": "https://github.com/imulus/uWestFest/tree/master/urlpicker",
-  "devDependencies": {
+  "version": "0.0.0",
+  "dependencies": {
     "grunt": "~0.4.2",
-    "load-grunt-tasks": "~0.3.0",
-    "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-watch": "~0.5.3",
-    "grunt-contrib-less": "~0.9.0",
-    "grunt-contrib-clean": "~0.5.0",
+    "bower": "~1.2.8",
     "grunt-contrib-copy": "~0.5.0",
-    "grunt-template": "~0.2.2",
+    "grunt-contrib-less": "~0.8.3",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-uglify": "~0.2.7",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-contrib-jshint": "~0.7.2",
+    "grunt-cli": "~0.1.11",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-touch": "~0.1.0",
+    "guid": "0.0.12",
+    "adm-zip": "~0.4.3",
+    "rimraf": "~2.2.5",
     "grunt-nuget": "~0.1.1",
-    "grunt-mkdir": "~0.1.1",
-    "grunt-umbraco-package": "~0.0.6",
-    "time-grunt": "~0.2.10",
-    "grunt-msbuild": "~0.1.12"
+    "grunt-template": "~0.2.2",
+    "fs-extra": "~0.8.1",
+    "grunt-msbuild": "~0.1.9",
+    "grunt-dotnet-assembly-info": "~1.0.9",
+    "load-grunt-tasks": "~0.4.0",
+    "grunt-umbraco-package": "0.0.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/imulus/uwestfest.git"
+  },
+  "devDependencies": {
+    "grunt-msbuild": "^0.1.12"
   }
 }
