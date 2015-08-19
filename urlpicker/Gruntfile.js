@@ -14,7 +14,7 @@ module.exports = function(grunt) {
           'app/scripts/controllers/url.picker.controller.js',
           'app/scripts/controllers/default.type.js'
         ],
-        dest: '<%= dest %>/<%= basePath %>/js/url.picker.js',
+        dest: '<%= basePath %>/js/url.picker.js',
         nonull: true
       }
     },
@@ -25,7 +25,7 @@ module.exports = function(grunt) {
           paths: ["app/styles"],
         },
         files: {
-          '<%= dest %>/<%= basePath %>/css/url.picker.css': 'app/styles/url.picker.less',
+          '<%= basePath %>/css/url.picker.css': 'app/styles/url.picker.less',
         }
       }
     },
@@ -59,14 +59,14 @@ module.exports = function(grunt) {
     copy: {
       config: {
         src: 'config/package.manifest',
-        dest: '<%= dest %>/<%= basePath %>/package.manifest',
+        dest: '<%= basePath %>/package.manifest',
       },      
 
       views: {
         expand: true,
         cwd: 'app/views/',
         src: '**',
-        dest: '<%= dest %>/<%= basePath %>/views/'
+        dest: '<%= basePath %>/views/'
       },
 
       dll: {
@@ -101,11 +101,15 @@ module.exports = function(grunt) {
     },
 
     copy: {
-      app_plugins: {
-        cwd: 'src/UrlPicker.Umbraco/App_Plugins/UrlPicker',
-        src: ['**'],
-        dest: '<%= basePath %>',
-        expand: true
+      config: {
+        src: 'config/package.manifest',
+        dest: '<%= basePath %>/package.manifest',
+      },      
+      views: {
+        expand: true,
+        cwd: 'app/views/',
+        src: '**',
+        dest: '<%= basePath %>/views/'
       },
       dll: {
         cwd: 'src/UrlPicker.Umbraco/bin/Debug/',
@@ -218,7 +222,7 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('default', ['clean', 'assemblyinfo', 'msbuild:dist', 'copy:dll', 'copy:app_plugins']);
+  grunt.registerTask('default', ['clean', 'assemblyinfo', 'less', 'concat', 'msbuild:dist', 'copy:config', 'copy:views', 'copy:dll']);
   grunt.registerTask('nuget',   ['clean:tmp', 'default', 'copy:nuget', 'template:nuspec', 'nugetpack']);
   grunt.registerTask('umbraco', ['clean:tmp', 'default', 'copy:umbraco', 'umbracoPackage']);
   grunt.registerTask('package', ['clean:tmp', 'default', 'copy:nuget', 'template:nuspec', 'nugetpack', 'copy:umbraco', 'umbracoPackage', 'clean:tmp']);
