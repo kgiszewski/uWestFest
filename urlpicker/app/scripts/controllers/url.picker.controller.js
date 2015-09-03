@@ -1,5 +1,7 @@
-angular.module('umbraco').controller('UrlPickerController', function($scope, dialogService, entityResource) {
+angular.module('umbraco').controller('UrlPickerController', function($scope, $timeout, dialogService, entityResource, angularHelper) {
 
+  var alreadyDirty = false;
+  
   init();
 
   $scope.switchType = function(type) {
@@ -82,4 +84,21 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
       $scope.mediaName =  getEntityName($scope.model.value.typeData.mediaId, "Media");
     }
   }
+
+
+  $scope.$watch('model.value', function (newval, oldval) {
+      //console.log(newval, oldval);
+
+      if (newval !== oldval) {
+          //run after DOM is loaded
+          $timeout(function () {
+              if (!alreadyDirty) {
+                  var currForm = angularHelper.getCurrentForm($scope);
+                  currForm.$setDirty();
+                  alreadyDirty = true;
+              }
+          }, 0);
+      }
+  }, true);
+
 });
