@@ -34,7 +34,17 @@
 		<div ng-show="model.value.type == 'media'">
 			<a ng-click="openTreePicker('media')" prevent-default>Select…</a>
 			{{mediaName}}
-            <a href class="delete-icon" ng-click="resetType('media')" ng-show="model.value.typeData.mediaId > 0"><i class="icon icon-delete"></i></a>
+
+			<a href class="delete-icon" ng-click="resetType('media')" ng-show="model.value.typeData.mediaId > 0"><i class="icon icon-delete"></i></a>
+
+			<div class="thumbnail" ng-show="model.config.mediaPreview">
+				<img ng-src="{{media.thumbnail}}" alt="" ng-show="media.thumbnail">
+				
+				<span class="icon-holder" ng-hide="media.thumbnail">
+					<i class="icon {{media.icon}} large" ></i>
+					<small>{{media.name}}</small>
+				</span>
+			</div>
 		</div>
 	</div>
 

@@ -1,4 +1,6 @@
-angular.module('umbraco').controller('UrlPickerController', function($scope, dialogService, entityResource) {
+angular.module('umbraco').controller('UrlPickerController', function($scope, dialogService, entityResource, mediaHelper) {
+
+  var currentDialog = null;
 
   init();
 
@@ -13,28 +15,57 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
       } else if (type == "media") {
           $scope.model.value.typeData.mediaId = null;
           $scope.mediaName = "";
+          $scope.media = null;
       } else {
           $scope.model.value.typeData.url = "";
       }
   }
 
   $scope.openTreePicker = function (type) {
-  	var ds = dialogService.treePicker({
-  		section: type,
-  		treeAlias: type,
-  	    startNodeId: getStartNodeId(type),
-  		multiPicker: false,
-  		callback: function(data) {
-        if(type == "content") {
-          $scope.model.value.typeData.contentId = data.id;
-    			$scope.contentName = getEntityName(data.id, "Document");
-        } 
-        else {
+
+    //ensure the current dialog is cleared before creating another!
+    if (currentDialog) {
+        dialogService.close(currentDialog);
+    }
+
+    var dialog;
+
+    if (type == "media") {
+      dialog = dialogService.mediaPicker({
+        onlyImages: $scope.model.config.mediaImagesOnly,
+        multiPicker: false,
+        callback: function(data) {
+          
+          var media = data;
+
+          if (!media.thumbnail) {
+              media.thumbnail = mediaHelper.resolveFileFromEntity(media, true);
+          }
+
+          $scope.media = media;
+
           $scope.model.value.typeData.mediaId = data.id;
           $scope.mediaName = getEntityName(data.id, "Media");
         }
-  		}
-  	});
+
+      });
+    } else {
+
+      dialog = dialogService.treePicker({
+      section: type,
+      treeAlias: type,
+      startNodeId: getStartNodeId(type),
+      multiPicker: false,
+      callback: function(data) {
+        $scope.model.value.typeData.contentId = data.id;
+        $scope.contentName = getEntityName(data.id, "Document");
+      }
+    });
+
+    }
+    
+    //save the currently assigned dialog so it can be removed before a new one is created
+    currentDialog = dialog;
   }
 
   function getStartNodeId(type) {
@@ -63,6 +94,20 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
 
     if (!$scope.model.config.mediaStartNode)
         $scope.model.config.mediaStartNode = -1;
+
+    if (!$scope.model.config.mediaImagesOnly || $scope.model.config.mediaImagesOnly == 0) {
+      $scope.model.config.mediaImagesOnly = false;
+    }
+    else {
+      $scope.model.config.mediaImagesOnly = true;
+    }
+
+    if (!$scope.model.config.mediaPreview || $scope.model.config.mediaPreview == 0) {
+      $scope.model.config.mediaPreview = false;
+    }
+    else {
+      $scope.model.config.mediaPreview = true;
+    }
 
     if (!$scope.model.value || !$scope.model.value.type) {
       var defaultType = "content";
