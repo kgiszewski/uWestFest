@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using UrlPicker.Umbraco.Models;
 using UrlPicker.Umbraco.Extensions;
 using Newtonsoft.Json;
 using Umbraco.Core;
