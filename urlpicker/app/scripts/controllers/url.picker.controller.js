@@ -107,6 +107,19 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
     }
     else {
       $scope.model.config.mediaPreview = true;
+
+      var mediaId = $scope.model.value.typeData.mediaId;
+
+      if(mediaId) {
+        entityResource.getById(mediaId, "Media").then(function (media) {
+          if (!media.thumbnail) { 
+              media.thumbnail = mediaHelper.resolveFileFromEntity(media, true);
+          }
+
+          $scope.media = media;
+        });
+        //Todo: handle scenario where selected media has been deleted
+      }
     }
 
     if (!$scope.model.value || !$scope.model.value.type) {
