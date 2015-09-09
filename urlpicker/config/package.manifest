@@ -22,6 +22,18 @@
     				view: "mediapicker"
     			},
           {
+            label: "Only images from media",
+            description: "Only let the editor choose images from media",
+            key: "mediaImagesOnly",
+            view: "boolean"
+          },
+          {
+            label: "Media preview",
+            description: "Use thumbnail preview for media",
+            key: "mediaPreview",
+            view: "boolean"
+          },
+          {
             label: "Hide Title",
             description: "Hides the title field",
             key: "hideTitle",
