@@ -1,52 +1,73 @@
 <div ng-controller="UrlPickerController" class="url-picker">
+	<!--{{pickers | json}}-->
 
-	<div class="link-meta">
-		<div class="row control-group" ng-hide="model.config.hideTitle">
-			<label for="urlPickerTitle">Title</label> <input id="urlPickerTitle" type="text" ng-model="model.value.meta.title" />
-		</div>
-		<div class="row control-group" ng-hide="model.config.hideOpenNew">
-			<label>Open in new window?&nbsp;&nbsp;<input type="checkbox" ng-model="model.value.meta.newWindow" /></label>
-		</div>
-	</div>
+	<ul ui-sortable="sortableOptions" ng-model="pickers" class="picker-wrapper">
+		<li ng-repeat="picker in pickers" ng-class="{ 'unsortable': pickers.length <= 1 }">
+			<div class="panel panel-default">
+                <div class="panel-heading handle clearfix">
+                	<span ng-show="picker.meta.title">{{picker.meta.title}}</span>
+                	<span ng-switch on="picker.type" ng-show="!picker.meta.title">
+                		<span ng-switch-when="content">{{picker.content.name}}</span>
+                		<span ng-switch-when="media">{{picker.media.name}}</span>
+                		<span ng-switch-default>{{picker.typeData.url}}</span>
+                	</span>
+                	<div class="pull-right">
+                		<a href="#" ng-click="editItem(picker)" class="no-drag" prevent-default><span class="icon-edit"></span>&nbsp;Edit</span></a>&nbsp;
+	                	<a href="#" ng-click="removeItem(picker)" ng-show="canRemoveItem()" class="no-drag" prevent-default><span class="icon-delete"></span>&nbsp;Remove</span></a>
+                	</div>
+                </div>
 
-	<ul class="nav nav-tabs">
-		<li ng-class="{active : model.value.type == 'url'}" ng-hide="model.config.hideUrl">
-			<a ng-click="switchType('url')" href="#" prevent-default>URL</a>
-		</li>
-		<li ng-class="{active : model.value.type == 'content'}" ng-hide="model.config.hideContent">
-			<a ng-click="switchType('content')" href="#" prevent-default>Content</a>
-		</li>
-		<li ng-class="{active: model.value.type == 'media'}" ng-hide="model.config.hideMedia">
-			<a ng-click="switchType('media')" href="#" prevent-default>Media</a>
-		</li>
-	</ul>
+            	<div class="panel-body" ng-class="{'collapsed': !picker.active}">
+					<div class="link-meta">
+						<div class="row control-group" ng-hide="model.config.hideTitle">
+							<label for="urlPickerTitle-{{$index + 1}}">Title</label> <input id="urlPickerTitle-{{$index + 1}}" type="text" ng-model="picker.meta.title" />
+						</div>
+						<div class="row control-group" ng-hide="model.config.hideOpenNew">
+							<label>Open in new window?&nbsp;&nbsp;<input type="checkbox" ng-model="picker.meta.newWindow" /></label>
+						</div>
+					</div>
 
-	<div class="tab-body">
-		<div ng-show="model.value.type == 'url'">
-			<input type="text" ng-model="model.value.typeData.url"/>
-			<a href class="delete-icon url-delete" ng-click="resetType('url')"><i class="icon icon-delete" ng-show="model.value.typeData.url"></i></a>
-		</div>
-		<div ng-show="model.value.type == 'content'">
-			<a ng-click="openTreePicker('content')" prevent-default>Select…</a>
-			{{contentName}}
-			<a href class="delete-icon" ng-click="resetType('content')" ng-show="model.value.typeData.contentId > 0"><i class="icon icon-delete"></i></a>
-		</div>
-		<div ng-show="model.value.type == 'media'">
-			<a ng-click="openTreePicker('media')" prevent-default>Select…</a>
-			{{mediaName}}
+					<ul class="nav nav-tabs">
+						<li ng-class="{active : picker.type == 'url'}" ng-hide="model.config.hideUrl">
+							<a ng-click="switchType('url', picker)" href="#" prevent-default>URL</a>
+						</li>
+						<li ng-class="{active : picker.type == 'content'}" ng-hide="model.config.hideContent">
+							<a ng-click="switchType('content', picker)" href="#" prevent-default>Content</a>
+						</li>
+						<li ng-class="{active: picker.type == 'media'}" ng-hide="model.config.hideMedia">
+							<a ng-click="switchType('media', picker)" href="#" prevent-default>Media</a>
+						</li>
+					</ul>
 
-			<a href class="delete-icon" ng-click="resetType('media')" ng-show="model.value.typeData.mediaId > 0"><i class="icon icon-delete"></i></a>
+					<div class="tab-body">
+						<div ng-show="picker.type == 'url'">
+							<input type="text" ng-model="picker.typeData.url" placeholder="ex. http://, https:// or www." />
+							<a href class="delete-icon url-delete" ng-click="resetType('url', picker)"><i class="icon icon-delete" ng-show="picker.typeData.url"></i></a>
+						</div>
+						<div ng-show="picker.type == 'content'">
+							<a ng-click="openTreePicker('content', picker)" prevent-default>Select…</a>
+							{{picker.content.name}}
+							<a href class="delete-icon" ng-click="resetType('content', picker)" ng-show="picker.typeData.contentId > 0"><i class="icon icon-delete"></i></a>
+						</div>
+						<div ng-show="picker.type == 'media'">
+							<a ng-click="openTreePicker('media', picker)" prevent-default>Select…</a>
+							{{picker.media.name}}
 
-			<div class="thumbnail" ng-show="model.config.mediaPreview">
-				<img ng-src="{{media.thumbnail}}" alt="" ng-show="media.thumbnail">
-				
-				<span class="icon-holder" ng-hide="media.thumbnail">
-					<i class="icon {{media.icon}} large" ></i>
-					<small>{{media.name}}</small>
-				</span>
+							<a href class="delete-icon" ng-click="resetType('media', picker)" ng-show="picker.typeData.mediaId > 0"><i class="icon icon-delete"></i></a>
+
+							<div class="thumbnail" ng-show="model.config.mediaPreview">
+								<img ng-src="{{picker.media.thumbnail}}" alt="" ng-show="picker.media.thumbnail">
+								
+								<span class="icon-holder" ng-hide="picker.media.thumbnail">
+									<i class="icon {{picker.media.icon}} large" ></i>
+									<small>{{picker.media.name}}</small>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
-		</div>
-	</div>
-
+		</li>
+	<a href="#" ng-click="addItem()" prevent-default><i class="icon icon-add blue"></i> Add Item</a>
 </div>
 

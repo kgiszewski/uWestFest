@@ -6,24 +6,33 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
   
   init();
 
-  $scope.switchType = function(type) {
-      $scope.model.value.type = type;
+  $scope.switchType = function(type, picker) {
+    var index = $scope.pickers.indexOf(picker);
+    $scope.pickers[index].type = type;
+    //$scope.model.value.type = type;
   }
 
-  $scope.resetType = function (type) {
+  $scope.resetType = function (type, picker) {
+    var index = $scope.pickers.indexOf(picker);
       if (type == "content") {
-          $scope.model.value.typeData.contentId = null;
+          $scope.pickers[index].typeData.contentId = null;
+
+          //$scope.model.value.typeData.contentId = null;
           $scope.contentName = "";
       } else if (type == "media") {
-          $scope.model.value.typeData.mediaId = null;
+          $scope.pickers[index].typeData.mediaId = null;
+          $scope.pickers[index].mediaName = "";
+
+          //$scope.model.value.typeData.mediaId = null;
           $scope.mediaName = "";
           $scope.media = null;
       } else {
-          $scope.model.value.typeData.url = "";
+          $scope.pickers[index].typeData.url = "";
+          //$scope.model.value.typeData.url = "";
       }
   }
 
-  $scope.openTreePicker = function (type) {
+  $scope.openTreePicker = function (type, picker) {
 
     //ensure the current dialog is cleared before creating another!
     if (currentDialog) {
@@ -44,10 +53,12 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
               media.thumbnail = mediaHelper.resolveFileFromEntity(media, true);
           }
 
-          $scope.media = media;
+          picker.media = { "name": media.name, "thumbnail": media.thumbnail, "icon": media.icon };
 
-          $scope.model.value.typeData.mediaId = data.id;
-          $scope.mediaName = getEntityName(data.id, "Media");
+          //$scope.model.value.typeData.mediaId = data.id;
+          //$scope.mediaName = getEntityName(data.id, "Media");
+          //picker.mediaName = getEntityName(data.id, "Media");
+          picker.typeData.mediaId = data.id;
         }
 
       });
@@ -70,6 +81,57 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
     currentDialog = dialog;
   }
 
+  $scope.canRemoveItem = function () {
+      return ($scope.pickers.length > 1); //($scope.model.value.length > 1);
+  }
+  $scope.addItem = function() {
+    var defaultType = "content";
+
+    if($scope.model.config.defaultType) {
+      defaultType = $scope.model.config.defaultType;
+    }
+    var pickerObj = { "type": defaultType, "meta": { "title": "", "newWindow": false }, "typeData": { "url": "", "contentId": null, "mediaId": null } };
+    
+    for (i = 0; i < $scope.pickers.length; i++) { 
+        $scope.pickers[i].active = false;
+    }
+
+    $scope.pickers.push(pickerObj);
+    $scope.pickers[$scope.pickers.length - 1].active = true;
+  }
+
+  $scope.editItem = function(picker) {
+    var index = $scope.pickers.indexOf(picker);
+
+    for (i = 0; i < $scope.pickers.length; i++) { 
+        $scope.pickers[i].active = i == index ? true : false;
+    }
+  }
+
+  $scope.removeItem = function(picker) {
+    var index = $scope.pickers.indexOf(picker);
+    if (confirm('Are you sure you want to remove this item?')) {
+        $scope.pickers.splice(index, 1);
+    }
+  }
+  //sort config
+  $scope.sortableOptions = {
+      axis: 'y',
+      cursor: "move",
+      handle: ".handle",
+      tolerance: "pointer",
+      cancel: ".no-drag",
+      containment: "parent",
+      items: "li:not(.unsortable)",
+      placeholder: 'sortable-placeholder',
+      forcePlaceholderSize: true,
+      update: function (ev, ui) {
+
+      },
+      stop: function (ev, ui) {
+
+      }
+  };
   function getStartNodeId(type) {
       if (type == "content") {
           return $scope.model.config.contentStartNode
@@ -124,6 +186,10 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
       }
     }
 
+    if(!$scope.pickers) {
+      $scope.pickers = [];
+    }
+
     if (!$scope.model.value || !$scope.model.value.type) {
       var defaultType = "content";
 
@@ -131,7 +197,10 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
         defaultType = $scope.model.config.defaultType;
       }
 
-      $scope.model.value = { "type": defaultType, "meta": { "title": "", "newWindow": false }, "typeData": { "url": "", "contentId": null, "mediaId": null } };
+      var pickerObj =  { "type": defaultType, "meta": { "title": "", "newWindow": false }, "typeData": { "url": "", "contentId": null, "mediaId": null } };
+      $scope.pickers.push(pickerObj);
+      console.log($scope.pickers);
+      $scope.model.value = angular.toJson($scope.pickers, true);
     }
     
     if ($scope.model.value.typeData && $scope.model.value.typeData.contentId) {
