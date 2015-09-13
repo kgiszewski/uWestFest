@@ -1,7 +1,7 @@
 <div ng-controller="UrlPickerController" class="url-picker">
 	<!--{{pickers | json}}-->
 	<ul ui-sortable="sortableOptions" ng-model="pickers" class="picker-wrapper">
-		<li ng-repeat="picker in pickers" ng-class="{ 'unsortable': pickers.length <= 1 }">
+		<li ng-repeat="picker in pickers" ng-class="{ 'unsortable': !model.config.multipleItems || pickers.length <= 1 }">
 			<div class="panel panel-default">
                 <div class="panel-heading handle clearfix">
                 	<span ng-show="picker.meta.title">{{picker.meta.title}}</span>

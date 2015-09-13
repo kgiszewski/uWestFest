@@ -34,8 +34,14 @@
             view: "boolean"
           },
           {
+            label: "Multiple items",
+            description: "Multiple items allowed",
+            key: "multipleItems",
+            view: "boolean"
+          },
+          {
             label: "Maximum items",
-            description: "Maximum number of items the editor can add",
+            description: "Maximum number of items the editor can add if multiple items is allowed",
             key: "maxItems",
             view: "number"
           },

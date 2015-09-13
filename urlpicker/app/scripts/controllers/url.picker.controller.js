@@ -90,6 +90,9 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
   }
 
   $scope.canAddItem = function () {
+      if(!$scope.model.config.multipleItems && $scope.pickers.length == 1) {
+        return false;
+      }
       return ($scope.model.config.maxItems > $scope.pickers.length);
   }
 
@@ -174,6 +177,9 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
 
     if (!$scope.model.config.mediaStartNode)
         $scope.model.config.mediaStartNode = -1;
+
+    if (!$scope.model.config.multipleItems)
+        $scope.model.config.multipleItems = false;
 
     $scope.model.config.maxItems = isNumeric($scope.model.config.maxItems) && $scope.model.config.maxItems !== 0 ? $scope.model.config.maxItems : Number.MAX_VALUE;
 
