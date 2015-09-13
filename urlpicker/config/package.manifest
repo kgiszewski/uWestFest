@@ -34,6 +34,12 @@
             view: "boolean"
           },
           {
+            label: "Maximum items",
+            description: "Maximum number of items the editor can add",
+            key: "maxItems",
+            view: "number"
+          },
+          {
             label: "Hide Title",
             description: "Hides the title field",
             key: "hideTitle",

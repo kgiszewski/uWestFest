@@ -1,6 +1,5 @@
 <div ng-controller="UrlPickerController" class="url-picker">
 	<!--{{pickers | json}}-->
-
 	<ul ui-sortable="sortableOptions" ng-model="pickers" class="picker-wrapper">
 		<li ng-repeat="picker in pickers" ng-class="{ 'unsortable': pickers.length <= 1 }">
 			<div class="panel panel-default">
@@ -68,6 +67,6 @@
 				</div>
 			</div>
 		</li>
-	<a href="#" ng-click="addItem()" prevent-default><i class="icon icon-add blue"></i> Add Item</a>
+	<a href="#" ng-click="addItem()" ng-show="canAddItem()" prevent-default><i class="icon icon-add blue"></i> Add Item</a>
 </div>
 

@@ -89,9 +89,14 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
     currentDialog = dialog;
   }
 
+  $scope.canAddItem = function () {
+      return ($scope.model.config.maxItems > $scope.pickers.length);
+  }
+
   $scope.canRemoveItem = function () {
       return ($scope.pickers.length > 1); //($scope.model.value.length > 1);
   }
+
   $scope.addItem = function() {
     var defaultType = "content";
 
@@ -157,6 +162,10 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
     });
   }
 
+  function isNumeric(n) {
+    return !isNaN(parseInt(n, 10));
+  }
+
   // Setup "render model" & defaults
   function init() {
 
@@ -165,6 +174,8 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
 
     if (!$scope.model.config.mediaStartNode)
         $scope.model.config.mediaStartNode = -1;
+
+    $scope.model.config.maxItems = isNumeric($scope.model.config.maxItems) && $scope.model.config.maxItems !== 0 ? $scope.model.config.maxItems : Number.MAX_VALUE;
 
     if (!$scope.model.config.mediaImagesOnly || $scope.model.config.mediaImagesOnly == 0) {
       $scope.model.config.mediaImagesOnly = false;
