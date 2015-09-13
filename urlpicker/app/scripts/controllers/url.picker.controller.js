@@ -127,10 +127,9 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
       axis: 'y',
       cursor: "move",
       handle: ".handle",
-      tolerance: "pointer",
       cancel: ".no-drag",
       containment: "parent",
-      items: "li:not(.unsortable)",
+      items: "> li:not(.unsortable)",
       placeholder: 'sortable-placeholder',
       forcePlaceholderSize: true,
       update: function (ev, ui) {
