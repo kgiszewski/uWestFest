@@ -19,6 +19,7 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
 
           //$scope.model.value.typeData.contentId = null;
           $scope.contentName = "";
+          $scope.content = null;
       } else if (type == "media") {
           $scope.pickers[index].typeData.mediaId = null;
           $scope.pickers[index].mediaName = "";
@@ -70,8 +71,15 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
       startNodeId: getStartNodeId(type),
       multiPicker: false,
       callback: function(data) {
-        $scope.model.value.typeData.contentId = data.id;
-        $scope.contentName = getEntityName(data.id, "Document");
+
+        var content = data;
+
+        picker.content = { "name": content.name };
+
+        //$scope.model.value.typeData.contentId = data.id;
+        //$scope.contentName = getEntityName(data.id, "Document");
+
+        picker.typeData.contentId = data.id;
       }
     });
 
