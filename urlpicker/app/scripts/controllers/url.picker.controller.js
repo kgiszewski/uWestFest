@@ -118,10 +118,31 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
 
   $scope.editItem = function(picker) {
     var index = $scope.pickers.indexOf(picker);
+    var oneAtATime = false;
 
-    for (i = 0; i < $scope.pickers.length; i++) { 
+    /*for (i = 0; i < $scope.pickers.length; i++) { 
         $scope.pickers[i].active = i == index ? true : false;
+    }*/
+    
+    var isActive = $scope.pickers[index].active;
+    //console.log("isActive", isActive);
+    
+    // collapse other panels
+    if(oneAtATime) {
+      for (i = 0; i < $scope.pickers.length; i++) { 
+        if(i !== index || isActive) {
+          $scope.pickers[i].active = false;
+        }
+      }
     }
+    
+    if(!isActive) {
+      $scope.pickers[index].active = true;
+    } else {
+      $scope.pickers[index].active = false;
+    }
+    
+    
   }
 
   $scope.removeItem = function(picker) {

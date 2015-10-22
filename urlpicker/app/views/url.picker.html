@@ -11,7 +11,10 @@
                 		<span ng-switch-default>{{picker.typeData.url}}</span>
                 	</span>
                 	<div class="pull-right">
-                		<a href="#" ng-click="editItem(picker)" class="no-drag" prevent-default><span class="icon-edit"></span>&nbsp;Edit</span></a>&nbsp;
+                		<a href="#" ng-click="editItem(picker)" class="no-drag" prevent-default>
+							<span ng-show="!picker.active"><span class="icon-edit"></span>&nbsp;Edit</span>
+							<span ng-show="picker.active"><span class="icon-edit"></span>&nbsp;Close</span>
+						</a>&nbsp;
 	                	<a href="#" ng-click="removeItem(picker)" ng-show="canRemoveItem()" class="no-drag" prevent-default><span class="icon-delete"></span>&nbsp;Remove</span></a>
                 	</div>
                 </div>
