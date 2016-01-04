@@ -11,11 +11,15 @@
                 		<span ng-switch-default>{{picker.typeData.url}}</span>
                 	</span>
                 	<div class="pull-right">
-                		<a href="#" ng-click="editItem(picker)" class="no-drag" prevent-default>
+                		<!--<a href="#" ng-click="editItem(picker)" class="no-drag" prevent-default>
 							<span ng-show="!picker.active"><span class="icon-edit"></span>&nbsp;Edit</span>
 							<span ng-show="picker.active"><span class="icon-edit"></span>&nbsp;Close</span>
-						</a>&nbsp;
-	                	<a href="#" ng-click="removeItem(picker)" ng-show="canRemoveItem()" class="no-drag" prevent-default><span class="icon-delete"></span>&nbsp;Remove</span></a>
+						</a>-->
+						<i class="icon icon-add" ng-click="openFieldsetPicker($index, $event)" ng-show="canAdd()"></i>
+						<i class="icon icon-navigation handle" ng-show="canSort()"></i>
+						<i class="icon icon-power" ng-click="enableDisable(picker)" ng-show="canDisable()"></i>
+						<i class="icon icon-delete" ng-click="removeItem(picker)" ng-show="canRemove()"></i>
+	                	<!--<a href="#" ng-click="removeItem(picker)" ng-show="canRemoveItem()" class="no-drag" prevent-default><span class="icon-delete"></span>&nbsp;Remove</span></a>-->
                 	</div>
                 </div>
 

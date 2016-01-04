@@ -88,16 +88,35 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
     //save the currently assigned dialog so it can be removed before a new one is created
     currentDialog = dialog;
   }
-
-  $scope.canAddItem = function () {
-      if(!$scope.model.config.multipleItems && $scope.pickers.length == 1) {
-        return false;
-      }
-      return ($scope.model.config.maxItems > $scope.pickers.length);
+  
+  //helper that returns if an item can be sorted
+  $scope.canSort = function () {
+      return countVisible() > 1;
+  }
+  
+  //helper that returns if an item can be disabled
+  $scope.canDisable = function () {
+      return $scope.model.config.enableDisabling;
   }
 
-  $scope.canRemoveItem = function () {
-      return ($scope.pickers.length > 1); //($scope.model.value.length > 1);
+  //helpers for determining if a user can do something
+  $scope.canAdd = function () {
+      if(!$scope.model.config.multipleItems && countVisible() == 1) {
+        return false;
+      }
+      return ($scope.model.config.maxItems > countVisible());
+  }    
+
+  //helper that returns if an item can be removed
+  $scope.canRemove = function () {
+      return countVisible() > 1;
+  }
+  
+  // helper to force the current form into the dirty state
+  $scope.setDirty = function () {
+      if($scope.form) {
+          $scope.form.$setDirty();
+      }
   }
 
   $scope.addItem = function() {
@@ -151,6 +170,7 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
         $scope.pickers.splice(index, 1);
     }
   }
+  
   //sort config
   $scope.sortableOptions = {
       axis: 'y',
@@ -168,6 +188,13 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
 
       }
   };
+  
+  //helper to count what is visible
+  function countVisible()
+  {
+      return $scope.pickers.length.length;
+  }
+  
   function getStartNodeId(type) {
       if (type == "content") {
           return $scope.model.config.contentStartNode
