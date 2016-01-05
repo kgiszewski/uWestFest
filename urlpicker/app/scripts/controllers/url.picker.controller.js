@@ -1,10 +1,13 @@
-angular.module('umbraco').controller('UrlPickerController', function($scope, dialogService, entityResource, mediaHelper) {
-
+angular.module('umbraco').controller('UrlPickerController', function($scope, dialogService, entityResource, mediaHelper, angularHelper) {
+  
   var currentDialog = null;
 
   var alreadyDirty = false;
   
   init();
+  
+  //get a reference to the current form
+  $scope.form = $scope.form || angularHelper.getCurrentForm($scope);
 
   $scope.switchType = function(type, picker) {
     var index = $scope.pickers.indexOf(picker);
