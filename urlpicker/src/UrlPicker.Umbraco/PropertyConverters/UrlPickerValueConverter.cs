@@ -31,7 +31,7 @@ namespace UrlPicker.Umbraco.PropertyConverters
             {
                 try
                 {
-                    var urlPicker = JsonConvert.DeserializeObject<UrlPicker.Umbraco.Models.UrlPicker>(sourceString);
+                    var urlPicker = JsonConvert.DeserializeObject<Models.UrlPicker>(sourceString);
 
                     var helper = new UmbracoHelper(UmbracoContext.Current);
 
@@ -47,7 +47,7 @@ namespace UrlPicker.Umbraco.PropertyConverters
 
                     switch (urlPicker.Type)
                     {
-                        case UrlPicker.Umbraco.Models.UrlPicker.UrlPickerTypes.Content:
+                        case Models.UrlPicker.UrlPickerTypes.Content:
 
                             if (urlPicker.TypeData.Content != null)
                             {
@@ -57,11 +57,11 @@ namespace UrlPicker.Umbraco.PropertyConverters
                             }                         
                             break;
 
-                        case UrlPicker.Umbraco.Models.UrlPicker.UrlPickerTypes.Media:
+                        case Models.UrlPicker.UrlPickerTypes.Media:
                             if (urlPicker.TypeData.Media != null)
                             {
                                 urlPicker.Url = urlPicker.TypeData.Media.Url;
-                                urlPicker.UrlAbsolute = urlPicker.TypeData.Media.UrlAbsolute();
+                                urlPicker.UrlAbsolute = urlPicker.TypeData.Media.Url();
                                 urlPicker.Name = (urlPicker.Meta.Title.IsNullOrWhiteSpace()) ? urlPicker.TypeData.Media.Name : urlPicker.Meta.Title;
                             }
                             break;
