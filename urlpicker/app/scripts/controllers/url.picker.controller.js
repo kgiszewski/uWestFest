@@ -19,17 +19,18 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
     var index = $scope.pickers.indexOf(picker);
       if (type == "content") {
           $scope.pickers[index].typeData.contentId = null;
+          $scope.pickers[index].content = null;
 
           //$scope.model.value.typeData.contentId = null;
-          $scope.contentName = "";
-          $scope.content = null;
+          //$scope.contentName = "";
+          //$scope.content = null;
       } else if (type == "media") {
           $scope.pickers[index].typeData.mediaId = null;
-          $scope.pickers[index].mediaName = "";
+          $scope.pickers[index].media = null;
 
           //$scope.model.value.typeData.mediaId = null;
-          $scope.mediaName = "";
-          $scope.media = null;
+          //$scope.mediaName = "";
+          //$scope.media = null;
       } else {
           $scope.pickers[index].typeData.url = "";
           //$scope.model.value.typeData.url = "";
@@ -77,7 +78,7 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
 
         var content = data;
 
-        picker.content = { "name": content.name };
+        picker.content = { "name": content.name, "icon": content.icon };
 
         //$scope.model.value.typeData.contentId = data.id;
         //$scope.contentName = getEntityName(data.id, "Document");
@@ -100,6 +101,12 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
   //helper that returns if an item can be disabled
   $scope.canDisable = function () {
       return $scope.model.config.enableDisabling;
+  }
+  
+  $scope.enableDisable = function (picker) {
+      picker.disabled = !picker.disabled;
+      // explicitly set the form as dirty when manipulating the enabled/disabled state of a picker
+      $scope.setDirty();
   }
 
   //helpers for determining if a user can do something
@@ -124,11 +131,11 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
 
   $scope.addItem = function() {
     var defaultType = "content";
+    var pickerObj = { "type": defaultType, "meta": { "title": "", "newWindow": false }, "typeData": { "url": "", "contentId": null, "mediaId": null } };
 
     if($scope.model.config.defaultType) {
       defaultType = $scope.model.config.defaultType;
     }
-    var pickerObj = { "type": defaultType, "meta": { "title": "", "newWindow": false }, "typeData": { "url": "", "contentId": null, "mediaId": null } };
     
     for (i = 0; i < $scope.pickers.length; i++) { 
         $scope.pickers[i].active = false;
@@ -195,7 +202,7 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
   //helper to count what is visible
   function countVisible()
   {
-      return $scope.pickers.length.length;
+      return $scope.pickers.length;
   }
   
   function getStartNodeId(type) {
@@ -231,6 +238,9 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
 
     if (!$scope.model.config.multipleItems)
         $scope.model.config.multipleItems = false;
+        
+    if (!$scope.model.config.enableDisabling)
+        $scope.model.config.enableDisabling = false;
 
     $scope.model.config.maxItems = isNumeric($scope.model.config.maxItems) && $scope.model.config.maxItems !== 0 ? $scope.model.config.maxItems : Number.MAX_VALUE;
 
@@ -271,10 +281,9 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
       if($scope.model.config.defaultType) {
         defaultType = $scope.model.config.defaultType;
       }
-
-      var pickerObj =  { "type": defaultType, "meta": { "title": "", "newWindow": false }, "typeData": { "url": "", "contentId": null, "mediaId": null } };
-      $scope.pickers.push(pickerObj);
+      
       console.log($scope.pickers);
+      $scope.pickers.push(pickerObj);
       $scope.model.value = angular.toJson($scope.pickers, true);
     }
     

@@ -1,9 +1,9 @@
 <div ng-controller="UrlPickerController" class="url-picker">
-	<!--{{pickers | json}}-->
+	{{pickers | json}}
 	<ul ui-sortable="sortableOptions" ng-model="pickers" class="picker-wrapper">
 		<li ng-repeat="picker in pickers" ng-class="{ 'unsortable': !model.config.multipleItems || pickers.length <= 1 }">
-			<div class="panel panel-default">
-                <div class="panel-heading handle clearfix">
+			<div class="panel panel-default" ng-class="{ 'dimmed': picker.disabled }">
+                <div ng-click="editItem(picker)" class="panel-heading clearfix">
                 	<span ng-show="picker.meta.title">{{picker.meta.title}}</span>
                 	<span ng-switch on="picker.type" ng-show="!picker.meta.title">
                 		<span ng-switch-when="content">{{picker.content.name}}</span>
@@ -52,13 +52,13 @@
 						</div>
 						<div ng-show="picker.type == 'content'">
 							<a ng-click="openTreePicker('content', picker)" prevent-default>Select…</a>
-							{{picker.content.name}}
+							<i class="icon {{picker.content.icon}}"></i> {{picker.content.name}}
 							<a href class="delete-icon" ng-click="resetType('content', picker)" ng-show="picker.typeData.contentId > 0"><i class="icon icon-delete"></i></a>
 						</div>
 						<div ng-show="picker.type == 'media'">
 							<a ng-click="openTreePicker('media', picker)" prevent-default>Select…</a>
-							{{picker.media.name}}
-
+							<i class="icon {{picker.media.icon}}"></i> {{picker.media.name}}
+                            
 							<a href class="delete-icon" ng-click="resetType('media', picker)" ng-show="picker.typeData.mediaId > 0"><i class="icon icon-delete"></i></a>
 
 							<div class="thumbnail" ng-show="model.config.mediaPreview">
@@ -74,6 +74,6 @@
 				</div>
 			</div>
 		</li>
-	<a href="#" ng-click="addItem()" ng-show="canAddItem()" prevent-default><i class="icon icon-add blue"></i> Add Item</a>
+    </ul>
+	<a href="#" ng-click="addItem()" ng-show="canAdd()" prevent-default><i class="icon icon-add blue"></i> Add Item</a>
 </div>
-

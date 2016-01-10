@@ -80,6 +80,12 @@
             description: "Choose which type the picker defaults to.",
             key: "defaultType",
             view: "~/App_Plugins/UrlPicker/views/default.type.html"
+          },
+          {
+            label: "Enable Picker Disabling?",
+            description: "Allows pickers to be individually enabled/disabled.",
+            key: "enableDisabling",
+            view: "boolean"
           }
         ]
       }
