@@ -2,28 +2,29 @@
 	{{pickers | json}}
 	<ul ui-sortable="sortableOptions" ng-model="pickers" class="picker-wrapper">
 		<li ng-repeat="picker in pickers" ng-class="{ 'unsortable': !model.config.multipleItems || pickers.length <= 1 }">
-			<div class="panel panel-default" ng-class="{ 'dimmed': picker.disabled }">
+			<div class="panel panel-default" ng-class="{ 'dimmed': picker.disabled, 'collapsed': !picker.active }">
                 <div ng-click="editItem(picker)" class="panel-heading clearfix">
-                	<span ng-show="picker.meta.title">{{picker.meta.title}}</span>
+                    <span class="caret" ng-show="model.config.multipleItems"></span>
+                	<span ng-show="picker.meta.title && !isEmpty(picker)">{{picker.meta.title}}</span>
                 	<span ng-switch on="picker.type" ng-show="!picker.meta.title">
-                		<span ng-switch-when="content">{{picker.content.name}}</span>
-                		<span ng-switch-when="media">{{picker.media.name}}</span>
-                		<span ng-switch-default>{{picker.typeData.url}}</span>
+                		<span ng-switch-when="content"><i class="icon {{picker.content.icon}}"></i> {{picker.content.name}}</span>
+                		<span ng-switch-when="media"><i class="icon {{picker.media.icon}}"></i> {{picker.media.name}}</span>
+                		<span ng-switch-default><i class="icon icon-link"></i> {{picker.typeData.url}}</span>
                 	</span>
                 	<div class="pull-right">
                 		<!--<a href="#" ng-click="editItem(picker)" class="no-drag" prevent-default>
 							<span ng-show="!picker.active"><span class="icon-edit"></span>&nbsp;Edit</span>
 							<span ng-show="picker.active"><span class="icon-edit"></span>&nbsp;Close</span>
 						</a>-->
-						<i class="icon icon-add" ng-click="openFieldsetPicker($index, $event)" ng-show="canAdd()"></i>
-						<i class="icon icon-navigation handle" ng-show="canSort()"></i>
-						<i class="icon icon-power" ng-click="enableDisable(picker)" ng-show="canDisable()"></i>
-						<i class="icon icon-delete" ng-click="removeItem(picker)" ng-show="canRemove()"></i>
+						<i class="icon icon-add" ng-click="openFieldsetPicker($index, $event)" ng-show="canAdd()" title="Add"></i>
+						<i class="icon icon-navigation handle" ng-show="canSort()" title="Sort"></i>
+						<i class="icon icon-power" ng-click="enableDisable(picker)" ng-show="canDisable()" ng-attr-title="{ picker.disabled: 'Enable', !picker.disabled: 'Disable' }"></i>
+						<i class="icon icon-delete" ng-click="removeItem(picker)" ng-show="canRemove()" title="Remove"></i>
 	                	<!--<a href="#" ng-click="removeItem(picker)" ng-show="canRemoveItem()" class="no-drag" prevent-default><span class="icon-delete"></span>&nbsp;Remove</span></a>-->
                 	</div>
                 </div>
 
-            	<div class="panel-body" ng-class="{'collapsed': !picker.active}">
+            	<div class="panel-body">
 					<div class="link-meta">
 						<div class="row control-group" ng-hide="model.config.hideTitle">
 							<label for="urlPickerTitle-{{$index + 1}}">Title</label> <input id="urlPickerTitle-{{$index + 1}}" type="text" ng-model="picker.meta.title" />

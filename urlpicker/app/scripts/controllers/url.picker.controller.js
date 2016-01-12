@@ -93,6 +93,49 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
     currentDialog = dialog;
   }
   
+  //helper to check if picker is empty
+  $scope.isEmpty = function (picker) {
+      if (picker.type == "content") { 
+          if(!isNullOrEmpty(picker.typeData.contentId)) {
+             return false;
+          }
+          return true;
+      }
+      else if (picker.type == "media") {
+          if(!isNullOrEmpty(picker.typeData.mediaId)) {
+             return false;
+          }
+          return true;
+      }
+      else if (picker.type == "url") {
+          if(!isNullOrEmpty(picker.typeData.url)) {
+             return false;
+          }
+          return true;
+      }
+      else {
+          return true;
+      }
+  }
+  
+  //helper to returns icon for current picker type
+  $scope.currentIcon = function (picker) {
+      var defaultIcon = "icon-anchor";
+      
+      if (picker.type == "content") { 
+          return !isNullOrEmpty(picker.content.icon) ? picker.content.icon : "icon-document";
+      }
+      else if (picker.type == "media") {
+          return !isNullOrEmpty(picker.media.icon) ? picker.media.icon : "icon-picture";
+      }
+      else if (picker.type == "url") {
+          return "icon-link";
+      }
+      else {
+          return defaultIcon;
+      }
+  }
+  
   //helper that returns if an item can be sorted
   $scope.canSort = function () {
       return countVisible() > 1;
@@ -146,6 +189,7 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
   }
 
   $scope.editItem = function(picker) {
+      
     var index = $scope.pickers.indexOf(picker);
     var oneAtATime = false;
 
@@ -192,7 +236,7 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
       placeholder: 'sortable-placeholder',
       forcePlaceholderSize: true,
       update: function (ev, ui) {
-
+            $scope.setDirty();
       },
       stop: function (ev, ui) {
 
@@ -203,6 +247,11 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
   function countVisible()
   {
       return $scope.pickers.length;
+  }
+  
+  function isNullOrEmpty(value)
+  {
+      return value == null || value == "";
   }
   
   function getStartNodeId(type) {

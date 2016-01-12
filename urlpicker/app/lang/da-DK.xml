@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language>
+  <area alias="urlPicker">
+    <key alias="title">Titel</key>
+    <key alias="newWindow">Åbn i nyt vindue?</key>
+    <key alias="url">URL</key>
+    <key alias="content">Indhold</key>
+    <key alias="media">Medie</key>
+    <key alias="select">Vælg...</key>
+    <key alias="urlPlaceholder">eks. http://, https:// eller www.</key>
+  </area>
+</language>

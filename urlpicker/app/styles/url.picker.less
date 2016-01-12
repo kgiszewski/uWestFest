@@ -1,4 +1,10 @@
 .url-picker {
+    
+    [ng-click],
+    [data-ng-click],
+    [x-ng-click] {
+        cursor: pointer;
+    }
 
 	.link-meta {
 		input[type=text] {
@@ -120,6 +126,8 @@
         border-bottom: 1px solid transparent;
         border-top-right-radius: 3px;
         border-top-left-radius: 3px;
+        
+        .caret { margin-top: 8px; transform: rotate(0); }
 	  }
       
       &.dimmed .panel-heading {
@@ -136,8 +144,13 @@
 
         .panel-body {
             padding: 15px;
-
-            &.collapsed {
+        }
+        
+        &.collapsed {
+            .panel-heading {
+                .caret { transform: rotate(-90deg); }
+            }
+            .panel-body {
                 display: none;
             }
         }
