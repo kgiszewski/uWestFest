@@ -118,24 +118,6 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
       }
   }
   
-  //helper to returns icon for current picker type
-  $scope.currentIcon = function (picker) {
-      var defaultIcon = "icon-anchor";
-      
-      if (picker.type == "content") { 
-          return !isNullOrEmpty(picker.content.icon) ? picker.content.icon : "icon-document";
-      }
-      else if (picker.type == "media") {
-          return !isNullOrEmpty(picker.media.icon) ? picker.media.icon : "icon-picture";
-      }
-      else if (picker.type == "url") {
-          return "icon-link";
-      }
-      else {
-          return defaultIcon;
-      }
-  }
-  
   //helper that returns if an item can be sorted
   $scope.canSort = function () {
       return countVisible() > 1;
