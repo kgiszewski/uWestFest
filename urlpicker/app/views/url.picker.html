@@ -5,20 +5,15 @@
 			<div class="panel panel-default" ng-class="{ 'dimmed': picker.disabled, 'collapsed': !picker.active }">
                 <div ng-click="editItem(picker)" class="panel-heading clearfix">
                     <span class="caret" ng-show="model.config.multipleItems"></span>
-                	<span ng-show="picker.meta.title && !isEmpty(picker)">{{picker.meta.title}}</span>
-                	<span ng-switch on="picker.type" ng-show="!picker.meta.title">
-                		<span ng-switch-when="content"><i class="icon {{picker.content.icon}}"></i> {{picker.content.name}}</span>
-                		<span ng-switch-when="media"><i class="icon {{picker.media.icon}}"></i> {{picker.media.name}}</span>
-                		<span ng-switch-default><i class="icon icon-link"></i> {{picker.typeData.url}}</span>
-                	</span>
-                	<div class="pull-right">
+                    <span><i class="icon {{getPickerIcon(picker)}}" ng-show="model.config.usePickerIcons"></i>{{getPickerHeading(picker)}}</span>
+                	<div class="picker-controls pull-right">
                 		<!--<a href="#" ng-click="editItem(picker)" class="no-drag" prevent-default>
 							<span ng-show="!picker.active"><span class="icon-edit"></span>&nbsp;Edit</span>
 							<span ng-show="picker.active"><span class="icon-edit"></span>&nbsp;Close</span>
 						</a>-->
-						<i class="icon icon-add" ng-click="openFieldsetPicker($index, $event)" ng-show="canAdd()" title="Add"></i>
-						<i class="icon icon-navigation handle" ng-show="canSort()" title="Sort"></i>
-						<i class="icon icon-power" ng-click="enableDisable(picker)" ng-show="canDisable()" ng-attr-title="{ picker.disabled: 'Enable', !picker.disabled: 'Disable' }"></i>
+						<i class="icon icon-add" ng-click="addItem(picker, $event)" ng-show="canAdd()" title="Add"></i>
+						<i class="icon icon-navigation handle" ng-show="canSort()" title="Move"></i>
+						<i class="icon icon-power" ng-click="enableDisable(picker, $event)" ng-show="canDisable()" ng-attr-title="{{ picker.disabled ? 'Enable' : 'Disable' }}"></i>
 						<i class="icon icon-delete" ng-click="removeItem(picker)" ng-show="canRemove()" title="Remove"></i>
 	                	<!--<a href="#" ng-click="removeItem(picker)" ng-show="canRemoveItem()" class="no-drag" prevent-default><span class="icon-delete"></span>&nbsp;Remove</span></a>-->
                 	</div>
@@ -76,5 +71,5 @@
 			</div>
 		</li>
     </ul>
-	<a href="#" ng-click="addItem()" ng-show="canAdd()" prevent-default><i class="icon icon-add blue"></i> Add Item</a>
+	<a href="#" ng-click="addItem(null, $event)" ng-show="canAdd()" prevent-default><i class="icon icon-add blue"></i> Add Item</a>
 </div>

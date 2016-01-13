@@ -93,29 +93,62 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
     currentDialog = dialog;
   }
   
+  $scope.getPickerIcon = function (picker) {
+      var icon = "icon-anchor";
+      
+      if(!$scope.isEmpty(picker)) {
+            if(picker.type == "content" && picker.content && picker.content.icon) {
+                icon = picker.content.icon;
+            }
+            if(picker.type == "media" && picker.media && picker.media.icon) {
+                icon = picker.media.icon;
+            }
+            if(picker.type == "url") {
+                icon = "icon-link";
+            } 
+      }
+      
+      return icon; 
+  }
+  
+  $scope.getPickerHeading = function (picker) {
+      var title = "(no link)";
+      
+      if(!$scope.isEmpty(picker) && picker.typeData) {
+            var metaTitle = picker.meta.title;
+            
+            if(picker.type == "content" && picker.content) {
+                title = metaTitle || picker.content.name;
+            }
+            if(picker.type == "media" && picker.media) {
+                title = metaTitle || picker.media.name;
+            }
+            if(picker.type == "url") {
+                title = metaTitle || picker.typeData.url;
+            }
+      }
+      
+      return title;
+  }
+  
   //helper to check if picker is empty
   $scope.isEmpty = function (picker) {
       if (picker.type == "content") { 
           if(!isNullOrEmpty(picker.typeData.contentId)) {
              return false;
           }
-          return true;
       }
-      else if (picker.type == "media") {
+      if (picker.type == "media") {
           if(!isNullOrEmpty(picker.typeData.mediaId)) {
              return false;
           }
-          return true;
       }
-      else if (picker.type == "url") {
+      if (picker.type == "url") {
           if(!isNullOrEmpty(picker.typeData.url)) {
              return false;
           }
-          return true;
       }
-      else {
-          return true;
-      }
+      return true;
   }
   
   //helper that returns if an item can be sorted
@@ -128,10 +161,16 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
       return $scope.model.config.enableDisabling;
   }
   
-  $scope.enableDisable = function (picker) {
+  $scope.enableDisable = function (picker, $event) {
       picker.disabled = !picker.disabled;
       // explicitly set the form as dirty when manipulating the enabled/disabled state of a picker
       $scope.setDirty();
+      
+      // On recent browsers, only $event.stopPropagation() is needed
+      if ($event.stopPropagation) $event.stopPropagation();
+      if ($event.preventDefault) $event.preventDefault();
+      $event.cancelBubble = true;
+      $event.returnValue = false;
   }
 
   //helpers for determining if a user can do something
@@ -154,7 +193,7 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
       }
   }
 
-  $scope.addItem = function() {
+  $scope.addItem = function(picker, $event) {
     var defaultType = "content";
     var pickerObj = { "type": defaultType, "meta": { "title": "", "newWindow": false }, "typeData": { "url": "", "contentId": null, "mediaId": null } };
 
@@ -162,29 +201,41 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
       defaultType = $scope.model.config.defaultType;
     }
     
-    for (i = 0; i < $scope.pickers.length; i++) { 
-        $scope.pickers[i].active = false;
+    if($scope.model.config.oneAtATime) {
+        for (var i = 0; i < $scope.pickers.length; i++) { 
+            $scope.pickers[i].active = false;
+        }
     }
-
-    $scope.pickers.push(pickerObj);
-    $scope.pickers[$scope.pickers.length - 1].active = true;
+    
+    if(picker != null) {
+        var index = $scope.pickers.indexOf(picker);
+        $scope.pickers.splice(index + 1, 0, pickerObj);
+        $scope.pickers[index].active = false;
+        $scope.pickers[index + 1].active = true;
+    }
+    else {
+        $scope.pickers.push(pickerObj);
+        $scope.pickers[$scope.pickers.length - 1].active = true;   
+    }
+    
+      // explicitly set the form as dirty when manipulating the enabled/disabled state of a picker
+      $scope.setDirty();
+      
+      // On recent browsers, only $event.stopPropagation() is needed
+      if ($event.stopPropagation) $event.stopPropagation();
+      if ($event.preventDefault) $event.preventDefault();
+      $event.cancelBubble = true;
+      $event.returnValue = false;
   }
 
   $scope.editItem = function(picker) {
       
     var index = $scope.pickers.indexOf(picker);
-    var oneAtATime = false;
-
-    /*for (i = 0; i < $scope.pickers.length; i++) { 
-        $scope.pickers[i].active = i == index ? true : false;
-    }*/
-    
     var isActive = $scope.pickers[index].active;
-    //console.log("isActive", isActive);
     
     // collapse other panels
-    if(oneAtATime) {
-      for (i = 0; i < $scope.pickers.length; i++) { 
+    if($scope.model.config.oneAtATime) {
+      for (var i = 0; i < $scope.pickers.length; i++) { 
         if(i !== index || isActive) {
           $scope.pickers[i].active = false;
         }
@@ -192,11 +243,10 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
     }
     
     if(!isActive) {
-      $scope.pickers[index].active = true;
+        $scope.pickers[index].active = true;
     } else {
-      $scope.pickers[index].active = false;
+        $scope.pickers[index].active = false;
     }
-    
     
   }
 
@@ -261,20 +311,55 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
   // Setup "render model" & defaults
   function init() {
 
+    // content start node
     if (!$scope.model.config.contentStartNode)
         $scope.model.config.contentStartNode = -1;
 
+    // media start node
     if (!$scope.model.config.mediaStartNode)
         $scope.model.config.mediaStartNode = -1;
 
-    if (!$scope.model.config.multipleItems)
+    // multiple items
+    if (!$scope.model.config.multipleItems || $scope.model.config.multipleItems == 0) {
         $scope.model.config.multipleItems = false;
-        
-    if (!$scope.model.config.enableDisabling)
+    }
+    else {
+        $scope.model.config.multipleItems = true;
+    }
+
+    // enable/disable pickers
+    if (!$scope.model.config.enableDisabling || $scope.model.config.enableDisabling == 0) {
         $scope.model.config.enableDisabling = false;
+    }
+    else {
+        $scope.model.config.enableDisabling = true;
+    }
 
-    $scope.model.config.maxItems = isNumeric($scope.model.config.maxItems) && $scope.model.config.maxItems !== 0 ? $scope.model.config.maxItems : Number.MAX_VALUE;
+    // one picker open at a time
+    if (!$scope.model.config.oneAtATime || $scope.model.config.oneAtATime == 0) {
+        $scope.model.config.oneAtATime = false;
+    }
+    else {
+        $scope.model.config.oneAtATime = true;
+    }
 
+    // use picker icons
+    if (!$scope.model.config.usePickerIcons || $scope.model.config.usePickerIcons == 0) {
+        $scope.model.config.usePickerIcons = false;
+    }
+    else {
+        $scope.model.config.usePickerIcons = true;
+    }
+    
+    // max items
+    if(!$scope.model.config.maxItems) {
+        $scope.model.config.maxItems = Number.MAX_VALUE;
+    }
+    else {
+        $scope.model.config.maxItems = isNumeric($scope.model.config.maxItems) && $scope.model.config.maxItems !== 0 && $scope.model.config.maxItems > 0 ? $scope.model.config.maxItems : Number.MAX_VALUE;
+    }
+
+    // allow only to select media images
     if (!$scope.model.config.mediaImagesOnly || $scope.model.config.mediaImagesOnly == 0) {
       $scope.model.config.mediaImagesOnly = false;
     }
@@ -282,6 +367,7 @@ angular.module('umbraco').controller('UrlPickerController', function($scope, dia
       $scope.model.config.mediaImagesOnly = true;
     }
 
+    // use media preview
     if (!$scope.model.config.mediaPreview || $scope.model.config.mediaPreview == 0) {
       $scope.model.config.mediaPreview = false;
     }

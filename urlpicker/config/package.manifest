@@ -86,6 +86,18 @@
             description: "Allows pickers to be individually enabled/disabled.",
             key: "enableDisabling",
             view: "boolean"
+          },
+          {
+            label: "One picker open at time?",
+            description: "Choose if only one picker should be open at time.",
+            key: "oneAtATime",
+            view: "boolean"
+          },
+          {
+            label: "Use picker icons?",
+            description: "Choose if pickers should use icon in header.",
+            key: "usePickerIcons",
+            view: "boolean"
           }
         ]
       }
