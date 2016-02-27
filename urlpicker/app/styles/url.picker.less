@@ -7,9 +7,19 @@
     }
 
 	.link-meta {
-		input[type=text] {
-			width: 265px;
-		}
+        .control-group {
+            display: flex;
+            
+            &.link-title {
+                input[type=text] {
+                    width: 265px;
+                    flex: 1;
+                }
+            }
+            &.link-newwindow {
+                
+            }
+        }
 	}
 
 	.control-group {
@@ -22,14 +32,14 @@
 
 	ul.nav-tabs {
 		margin-bottom: 0;
-		width: 322px;
+		width: auto;
 	}
 
 	.tab-body {
 		border: 1px solid #e3e3e3;
 		border-top: 0 none;
 		padding: 10px;
-		width: 300px;
+		width: auto;
 
 		input[type=text] {
 			width: 88%;
@@ -84,6 +94,7 @@
 	    padding: 0;
 	    list-style: none;
 	    width: 400px;
+	    max-width: 100%;
 
 	    li {
             
@@ -108,8 +119,8 @@
 	  background-color: #fff;
 	  border: 1px solid transparent;
 	  border-radius: 4px;
-	  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.05);
-	  box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+	  /*-webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+	  box-shadow: 0 1px 1px rgba(0,0,0,0.05);*/
       
       &.panel-default {
     	border-color: #ddd;
@@ -145,6 +156,8 @@
 	  }
       
       &.dimmed {
+         border-style: dashed;
+         
          .panel-heading {
             color: #d9d9d9;
             
@@ -171,6 +184,7 @@
         
         &.collapsed {
             .panel-heading {
+                border-bottom: none;
                 .caret { transform: rotate(-90deg); }
             }
             .panel-body {

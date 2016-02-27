@@ -14,17 +14,17 @@
 						<i class="icon icon-add" ng-click="addItem(picker, $event)" ng-show="canAdd()" title="Add"></i>
 						<i class="icon icon-navigation handle" ng-show="canSort()" title="Move"></i>
 						<i class="icon icon-power" ng-click="enableDisable(picker, $event)" ng-show="canDisable()" ng-attr-title="{{ picker.disabled ? 'Enable' : 'Disable' }}"></i>
-						<i class="icon icon-delete" ng-click="removeItem(picker)" ng-show="canRemove()" title="Remove"></i>
+						<i class="icon icon-delete" ng-click="removeItem(picker, $event)" ng-show="canRemove()" title="Remove"></i>
 	                	<!--<a href="#" ng-click="removeItem(picker)" ng-show="canRemoveItem()" class="no-drag" prevent-default><span class="icon-delete"></span>&nbsp;Remove</span></a>-->
                 	</div>
                 </div>
 
             	<div class="panel-body">
 					<div class="link-meta">
-						<div class="row control-group" ng-hide="model.config.hideTitle">
+						<div class="row control-group link-title" ng-hide="model.config.hideTitle">
 							<label for="urlPickerTitle-{{$index + 1}}">Title</label> <input id="urlPickerTitle-{{$index + 1}}" type="text" ng-model="picker.meta.title" />
 						</div>
-						<div class="row control-group" ng-hide="model.config.hideOpenNew">
+						<div class="row control-group link-newwindow" ng-hide="model.config.hideOpenNew">
 							<label>Open in new window?&nbsp;&nbsp;<input type="checkbox" ng-model="picker.meta.newWindow" /></label>
 						</div>
 					</div>
@@ -56,7 +56,7 @@
 							<i class="icon {{picker.media.icon}}"></i> {{picker.media.name}}
                             
 							<a href class="delete-icon" ng-click="resetType('media', picker)" ng-show="picker.typeData.mediaId > 0"><i class="icon icon-delete"></i></a>
-
+                            
 							<div class="thumbnail" ng-show="model.config.mediaPreview">
 								<img ng-src="{{picker.media.thumbnail}}" alt="" ng-show="picker.media.thumbnail">
 								
