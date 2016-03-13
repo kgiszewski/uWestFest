@@ -181,7 +181,7 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
     }
 
     $scope.enableDisable = function (picker, $event) {
-        picker.disabled = !picker.disabled;
+        picker.disabled = picker.disabled ? false : true;
         // explicitly set the form as dirty when manipulating the enabled/disabled state of a picker
         $scope.setDirty();
 
@@ -214,7 +214,7 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
 
     $scope.addItem = function (picker, $event) {
         var defaultType = "content";
-        var pickerObj = { "type": defaultType, "meta": { "title": "", "newWindow": false }, "typeData": { "url": "", "contentId": null, "mediaId": null} };
+        var pickerObj = { "type": defaultType, "meta": { "title": "", "newWindow": false }, "typeData": { "url": "", "contentId": null, "mediaId": null}, "disabled": false };
 
         if ($scope.model.config.defaultType) {
             defaultType = $scope.model.config.defaultType;
@@ -338,7 +338,7 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
         if (config.startWithAddButton)
             return [];
 
-        return [{ "type": config.defaultType, "meta": { "title": "", "newWindow": false }, "typeData": { "url": "", "contentId": null, "mediaId": null}}]; //[getEmptyRenderFieldset(config.fieldsets[0])] };
+        return [{ "type": config.defaultType, "meta": { "title": "", "newWindow": false }, "typeData": { "url": "", "contentId": null, "mediaId": null}, "disabled": false }]; //[getEmptyRenderFieldset(config.fieldsets[0])] };
     }
 
     function isNullOrEmpty(value) {
