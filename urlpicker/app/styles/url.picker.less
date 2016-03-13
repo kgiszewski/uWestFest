@@ -5,6 +5,13 @@
     [x-ng-click] {
         cursor: pointer;
     }
+    
+    .truncate {
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+	}
 
 	.link-meta {
         .control-group {
@@ -45,6 +52,17 @@
 		border-top: 0 none;
 		padding: 10px;
 		width: auto;
+        
+        .select {
+            display: inline-block;
+            overflow: hidden;
+            margin-right: 3px;
+        }
+        
+        .truncate {
+            width: ~"calc(100% - 100px)";
+            display: inline-block;
+        }
 
 		input[type=text] {
 			width: 88%;
@@ -151,6 +169,13 @@
         }
         .caret + span > .icon { 
             margin-right: 3px;
+        }
+        .truncate {
+            width: ~"calc(100% - 120px)";
+            display: inline-block;
+            // add negative margin-bottom as display:inline-block + overflow:hidden
+            // seems to add extra height of element
+            margin-bottom: -3px;
         }
         .picker-controls {
             -webkit-user-select: none; 

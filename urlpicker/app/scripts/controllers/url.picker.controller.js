@@ -1,4 +1,4 @@
-angular.module('umbraco').controller('UrlPickerController', function ($scope, $timeout, dialogService, entityResource, mediaHelper, angularHelper) {
+angular.module('umbraco').controller('UrlPickerController', function ($scope, $timeout, dialogService, entityResource, mediaHelper, angularHelper, iconHelper) {
 
     var currentDialog = null;
 
@@ -87,6 +87,11 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
                     var content = data;
                     console.log("content", content);
 
+                    // fix icon if it is a legacy icon
+                    if (iconHelper.isLegacyIcon(content.icon)) {
+                        content.icon = iconHelper.convertFromLegacyIcon(content.icon);
+                    }
+
                     picker.content = { "name": content.name, "icon": content.icon };
 
                     //$scope.model.value.typeData.contentId = data.id;
@@ -170,6 +175,11 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
         return $scope.model.config.enableDisabling;
     }
 
+    //helpers for determining if the add button should be shown
+    $scope.showAddButton = function () {
+        return $scope.model.config.startWithAddButton && countVisible() === 0;
+    }
+
     $scope.enableDisable = function (picker, $event) {
         picker.disabled = !picker.disabled;
         // explicitly set the form as dirty when manipulating the enabled/disabled state of a picker
@@ -192,7 +202,7 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
 
     //helper that returns if an item can be removed
     $scope.canRemove = function () {
-        return countVisible() > 1;
+        return countVisible() > 1 || $scope.model.config.startWithAddButton;
     }
 
     // helper to force the current form into the dirty state
@@ -282,12 +292,34 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
     $scope.sortableOptions = {
         axis: 'y',
         cursor: "move",
+        //cursorAt: { top: height / 2, left: width / 2 },
         handle: ".handle",
         cancel: ".no-drag",
-        containment: "parent",
+        //containment: "parent", // it seems to be an issue to use containment, when sortable items not have same height
+        tolerance: 'intersect', //'pointer'
         items: "> li:not(.unsortable)",
         placeholder: 'sortable-placeholder',
         forcePlaceholderSize: true,
+        start: function (ev, ui) {
+            console.log("ui.item", ui.item);
+            console.log("ui.item.helper", ui.item.helper);
+            console.log("$(ui.item)", $(ui.item));
+            console.log("$(ui.item).find('.panel')", $(ui.item).find(".panel"));
+            console.log($(ui.item).find(".panel").height());
+            var panelHeight = $(ui.item).find(".panel").height();
+            //console.log($(ui.helper.item).closest(".panel").hasClass('collapsed'));
+
+            //ui.placeholder.height(ui.item.height());
+            //ui.placeholder.width(ui.item.width());
+            var height = ui.item.height();
+            var width = ui.item.width();
+            console.log(height, width);
+
+            $(ui.helper.item).draggable("option", "cursorAt", {
+                left: Math.floor(width / 2),
+                top: Math.floor(height / 2)
+            });
+        },
         update: function (ev, ui) {
             $scope.setDirty();
         },
@@ -299,6 +331,14 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
     //helper to count what is visible
     function countVisible() {
         return $scope.pickers.length;
+    }
+
+    // helper to get initial model if none was provided
+    function getDefaultModel(config) {
+        if (config.startWithAddButton)
+            return [];
+
+        return [{ "type": config.defaultType, "meta": { "title": "", "newWindow": false }, "typeData": { "url": "", "contentId": null, "mediaId": null}}]; //[getEmptyRenderFieldset(config.fieldsets[0])] };
     }
 
     function isNullOrEmpty(value) {
@@ -344,6 +384,21 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
         }
         else {
             $scope.model.config.multipleItems = true;
+        }
+
+        // default type
+        if ($scope.model.config.defaultType) {
+            defaultType = $scope.model.config.defaultType;
+        } else {
+            defaultType = "content";
+        }
+
+        // start with add-button
+        if (!$scope.model.config.startWithAddButton || $scope.model.config.startWithAddButton == 0) {
+            $scope.model.config.startWithAddButton = false;
+        }
+        else {
+            $scope.model.config.startWithAddButton = true;
         }
 
         // enable/disable pickers
@@ -397,11 +452,13 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
         console.log("$scope.model.value", $scope.model.value);
         //$scope.pickers = angular.fromJson($scope.model.value); // || [];
 
-        if (!$scope.model.value) {
-            $scope.pickers = [];
+        $scope.pickers = $scope.model.value ? angular.fromJson($scope.model.value) : getDefaultModel($scope.model.config);
+        console.log("$scope.pickers", $scope.pickers);
+        /*if (!$scope.model.value) {
+        $scope.pickers = []; console.log("getDefaultModel", getDefaultModel($scope.model.config)); // [];
         } else {
-            $scope.pickers = angular.fromJson($scope.model.value);
-        }
+        $scope.pickers = angular.fromJson($scope.model.value);
+        }*/
 
         if ($scope.model.config.mediaPreview) {
             angular.forEach($scope.pickers, function (obj) {
@@ -429,19 +486,19 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
             });
         }
 
-        if (!$scope.model.value || !$scope.model.value.type) {
-            var defaultType = "content";
+        /*if (!$scope.model.value || !$scope.model.value.type) {
+        var defaultType = "content";
 
-            if ($scope.model.config.defaultType) {
-                defaultType = $scope.model.config.defaultType;
-            }
-
-            console.log($scope.pickers);
-            //var pickerObj = { "type": defaultType, "meta": { "title": "", "newWindow": false }, "typeData": { "url": "", "contentId": null, "mediaId": null } };
-            //$scope.pickers.push(pickerObj);
-
-            //$scope.model.value = angular.toJson($scope.pickers, true);
+        if ($scope.model.config.defaultType) {
+        defaultType = $scope.model.config.defaultType;
         }
+
+        console.log($scope.pickers);
+        //var pickerObj = { "type": defaultType, "meta": { "title": "", "newWindow": false }, "typeData": { "url": "", "contentId": null, "mediaId": null } };
+        //$scope.pickers.push(pickerObj);
+
+        //$scope.model.value = angular.toJson($scope.pickers, true);
+        }*/
 
         /*if ($scope.model.value.typeData && $scope.model.value.typeData.contentId) {
         $scope.contentName = getEntityName($scope.model.value.typeData.contentId, "Document");
@@ -453,7 +510,7 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
     }
 
     $scope.sync = function () {
-        var array = angular.copy($scope.pickers) || [];
+        var array = $scope.pickers ? angular.copy($scope.pickers) : [];
         array.forEach(function (v) {
             delete v.active;
             //delete v.disabled;

@@ -82,6 +82,12 @@
             view: "~/App_Plugins/UrlPicker/views/default.type.html"
           },
           {
+            label: "Start with add button?",
+            description: "Empty property shows an add button instead of providing a default picker.",
+            key: "startWithAddButton",
+            view: "boolean"
+          },
+          {
             label: "Enable Picker Disabling?",
             description: "Allows pickers to be individually enabled/disabled.",
             key: "enableDisabling",

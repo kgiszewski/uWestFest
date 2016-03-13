@@ -1,11 +1,11 @@
 <div ng-controller="UrlPickerController" class="url-picker">
 	{{pickers | json}}
-	<ul ui-sortable="sortableOptions" ng-model="pickers" class="picker-wrapper">
+	<ul ui-sortable="sortableOptions" ng-model="pickers" class="picker-wrapper" ng-show="!showAddButton()">
 		<li ng-repeat="picker in pickers" ng-class="{ 'unsortable': !model.config.multipleItems || pickers.length <= 1 }">
 			<div class="panel panel-default" ng-class="{ 'dimmed': picker.disabled, 'collapsed': !picker.active }">
                 <div ng-click="editItem(picker)" class="panel-heading clearfix">
                     <span class="caret" ng-show="model.config.multipleItems"></span>
-                    <span><i class="icon {{getPickerIcon(picker)}}" ng-show="model.config.usePickerIcons"></i>{{getPickerHeading(picker)}}</span>
+                    <span class="truncate"><i class="icon {{getPickerIcon(picker)}}" ng-show="model.config.usePickerIcons"></i>{{getPickerHeading(picker)}}</span>
                 	<div class="picker-controls pull-right">
                 		<!--<a href="#" ng-click="editItem(picker)" class="no-drag" prevent-default>
 							<span ng-show="!picker.active"><span class="icon-edit"></span>&nbsp;Edit</span>
@@ -47,13 +47,13 @@
 							<a href class="delete-icon url-delete" ng-click="resetType('url', picker)"><i class="icon icon-delete" ng-show="picker.typeData.url"></i></a>
 						</div>
 						<div ng-show="picker.type == 'content'">
-							<a ng-click="openTreePicker('content', picker)" prevent-default>Select…</a>
-							<i class="icon {{picker.content.icon}}"></i> {{picker.content.name}}
+							<a ng-click="openTreePicker('content', picker)" class="select" prevent-default>Select…</a>
+							<span class="truncate"><i class="icon {{picker.content.icon}}"></i> {{picker.content.name}}</span>
 							<a href class="delete-icon" ng-click="resetType('content', picker)" ng-show="picker.typeData.contentId > 0"><i class="icon icon-delete"></i></a>
 						</div>
 						<div ng-show="picker.type == 'media'">
-							<a ng-click="openTreePicker('media', picker)" prevent-default>Select…</a>
-							<i class="icon {{picker.media.icon}}"></i> {{picker.media.name}}
+							<a ng-click="openTreePicker('media', picker)" class="select" prevent-default>Select…</a>
+                            <span class="truncate"><i class="icon {{picker.media.icon}}"></i> {{picker.media.name}}</span>
                             
 							<a href class="delete-icon" ng-click="resetType('media', picker)" ng-show="picker.typeData.mediaId > 0"><i class="icon icon-delete"></i></a>
                             
@@ -71,5 +71,5 @@
 			</div>
 		</li>
     </ul>
-	<a href="#" ng-click="addItem(null, $event)" ng-show="canAdd()" prevent-default><i class="icon icon-add blue"></i> Add Item</a>
+	<a href="#" ng-click="addItem(null, $event)" ng-show="showAddButton()" prevent-default><i class="icon icon-add blue"></i> Add Item</a>
 </div>
