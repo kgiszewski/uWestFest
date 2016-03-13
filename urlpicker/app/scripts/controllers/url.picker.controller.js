@@ -72,6 +72,7 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
                     }
 
                     $scope.sync();
+                    $scope.setDirty();
                 }
 
             });
@@ -98,6 +99,9 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
                     //$scope.contentName = getEntityName(data.id, "Document");
 
                     picker.typeData.contentId = content.id;
+                    
+                    $scope.sync();
+                    $scope.setDirty();
                 }
             });
 
@@ -182,6 +186,7 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
 
     $scope.enableDisable = function (picker, $event) {
         picker.disabled = picker.disabled ? false : true;
+        $scope.sync();
         // explicitly set the form as dirty when manipulating the enabled/disabled state of a picker
         $scope.setDirty();
 
@@ -277,8 +282,8 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
         var index = $scope.pickers.indexOf(picker);
         if (confirm('Are you sure you want to remove this item?')) {
             $scope.pickers.splice(index, 1);
-            console.log("$scope.sync()");
             $scope.sync();
+            $scope.setDirty();
         }
 
         // On recent browsers, only $event.stopPropagation() is needed
@@ -524,7 +529,7 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
         $scope.model.value = angular.toJson(array, true);
     };
 
-    $scope.$watch('model.value', function (newval, oldval) {
+    /*$scope.$watch('model.value', function (newval, oldval) {
         //console.log(newval, oldval);
 
         if (newval !== oldval) {
@@ -537,6 +542,6 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
                 }
             }, 0);
         }
-    }, true);
+    }, true);*/
 
 });
