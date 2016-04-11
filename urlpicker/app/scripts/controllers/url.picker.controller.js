@@ -280,19 +280,12 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
         placeholder: 'sortable-placeholder',
         forcePlaceholderSize: true,
         start: function (ev, ui) {
-            console.log("ui.item", ui.item);
-            console.log("ui.item.helper", ui.item.helper);
-            console.log("$(ui.item)", $(ui.item));
-            console.log("$(ui.item).find('.panel')", $(ui.item).find(".panel"));
-            console.log($(ui.item).find(".panel").height());
-            var panelHeight = $(ui.item).find(".panel").height();
-            //console.log($(ui.helper.item).closest(".panel").hasClass('collapsed'));
+            //var panelHeight = $(ui.item).find(".panel").height();
 
             //ui.placeholder.height(ui.item.height());
             //ui.placeholder.width(ui.item.width());
             var height = ui.item.height();
             var width = ui.item.width();
-            console.log(height, width);
 
             $(ui.helper.item).draggable("option", "cursorAt", {
                 left: Math.floor(width / 2),
