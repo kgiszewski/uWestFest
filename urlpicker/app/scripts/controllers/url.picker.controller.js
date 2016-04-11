@@ -214,11 +214,11 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
 
     $scope.addItem = function (picker, $event) {
         var defaultType = "content";
-        var pickerObj = { "type": defaultType, "meta": { "title": "", "newWindow": false }, "typeData": { "url": "", "contentId": null, "mediaId": null}, "disabled": false };
-
         if ($scope.model.config.defaultType) {
             defaultType = $scope.model.config.defaultType;
         }
+        
+        var pickerObj = { "type": defaultType, "meta": { "title": "", "newWindow": false }, "typeData": { "url": "", "contentId": null, "mediaId": null}, "disabled": false };
 
         // collapse other panels
         if ($scope.model.config.oneAtATime) {
