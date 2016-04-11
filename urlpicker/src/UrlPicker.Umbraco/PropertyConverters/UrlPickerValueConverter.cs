@@ -84,7 +84,7 @@ namespace UrlPicker.Umbraco.PropertyConverters
                 catch (Exception ex)
                 {
                     LogHelper.Error<UrlPickerValueConverter>(ex.Message, ex);
-                    return new UrlPicker.Umbraco.Models.UrlPicker();
+                    return new List<UrlPicker.Umbraco.Models.UrlPicker>();
                 }
             }
 
