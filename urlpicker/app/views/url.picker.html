@@ -1,19 +1,15 @@
 <div ng-controller="UrlPickerController" class="url-picker">
-	<!--{{pickers | json}}-->
 	<ul ui-sortable="sortableOptions" ng-model="pickers" class="picker-wrapper" ng-show="!showAddButton()">
 		<li ng-repeat="picker in pickers" ng-class="{ 'unsortable': !model.config.multipleItems || pickers.length <= 1 }">
 			<div class="panel panel-default" ng-class="{ 'dimmed': picker.disabled, 'collapsed': !picker.active }">
+                
                 <div ng-click="editItem(picker)" class="panel-heading clearfix">
                     <span class="caret" ng-show="model.config.multipleItems"></span>
                     <span class="truncate"><i class="icon {{getPickerIcon(picker)}}" ng-show="model.config.usePickerIcons"></i>{{getPickerHeading(picker)}}</span>
                 	<div class="picker-controls pull-right">
-                		<!--<a href="#" ng-click="editItem(picker)" class="no-drag" prevent-default>
-							<span ng-show="!picker.active"><span class="icon-edit"></span>&nbsp;Edit</span>
-							<span ng-show="picker.active"><span class="icon-edit"></span>&nbsp;Close</span>
-						</a>-->
 						<i class="icon icon-add" ng-click="addItem(picker, $event)" ng-show="canAdd()" localize="title" title="@urlPicker_add"></i>
 						<i class="icon icon-navigation handle" ng-show="canSort()" localize="title" title="@urlPicker_move"></i>
-						<i class="icon icon-power" ng-click="enableDisable(picker, $event)" ng-show="canDisable()" ng-attr-title="{{ picker.disabled ? 'Enable' : 'Disable' }}"></i>
+						<i class="icon icon-power" ng-click="enableDisable(picker, $event)" ng-show="canDisable()" ng-attr-title="{{ picker.disabled ? enableTooltip : disableTooltip }}"></i>
 						<i class="icon icon-delete" ng-click="removeItem(picker, $event)" ng-show="canRemove()" localize="title" title="@urlPicker_remove"></i>
                 	</div>
                 </div>

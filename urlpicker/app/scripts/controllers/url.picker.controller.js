@@ -1,9 +1,8 @@
-angular.module('umbraco').controller('UrlPickerController', function ($scope, $timeout, dialogService, entityResource, mediaHelper, angularHelper, iconHelper) {
+angular.module('umbraco').controller('UrlPickerController', function ($scope, $timeout, dialogService, entityResource, mediaHelper, angularHelper, iconHelper, localizationService) {
 
     var currentDialog = null;
-
     var alreadyDirty = false;
-
+    
     init();
 
     //get a reference to the current form
@@ -12,7 +11,6 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
     $scope.switchType = function (type, picker) {
         var index = $scope.pickers.indexOf(picker);
         $scope.pickers[index].type = type;
-        //$scope.model.value.type = type;
     }
 
     $scope.resetType = function (type, picker) {
@@ -20,20 +18,11 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
         if (type == "content") {
             $scope.pickers[index].typeData.contentId = null;
             $scope.pickers[index].content = null;
-
-            //$scope.model.value.typeData.contentId = null;
-            //$scope.contentName = "";
-            //$scope.content = null;
         } else if (type == "media") {
             $scope.pickers[index].typeData.mediaId = null;
             $scope.pickers[index].media = null;
-
-            //$scope.model.value.typeData.mediaId = null;
-            //$scope.mediaName = "";
-            //$scope.media = null;
         } else {
             $scope.pickers[index].typeData.url = "";
-            //$scope.model.value.typeData.url = "";
         }
     }
 
@@ -63,12 +52,7 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
                         }
 
                         picker.media = { "name": media.name, "thumbnail": media.thumbnail, "icon": getSafeIcon(media.icon) };
-
-                        //$scope.model.value.typeData.mediaId = data.id;
-                        //$scope.mediaName = getEntityName(data.id, "Media");
-                        //picker.mediaName = getEntityName(data.id, "Media");
                         picker.typeData.mediaId = media.id;
-                        console.log("callback media", picker.media);
                     }
 
                     $scope.sync();
@@ -86,13 +70,8 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
                 callback: function (data) {
 
                     var content = data;
-                    console.log("content", content);
 
                     picker.content = { "name": content.name, "icon": getSafeIcon(content.icon) };
-
-                    //$scope.model.value.typeData.contentId = data.id;
-                    //$scope.contentName = getEntityName(data.id, "Document");
-
                     picker.typeData.contentId = content.id;
                     
                     $scope.sync();
@@ -456,17 +435,11 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
         else {
             $scope.model.config.mediaPreview = true;
         }
-
-        console.log("$scope.model.value", $scope.model.value);
-        //$scope.pickers = angular.fromJson($scope.model.value); // || [];
+        
+        $scope.enableTooltip = localizationService.localize("urlPicker_enable");
+        $scope.disableTooltip = localizationService.localize("urlPicker_disable");
 
         $scope.pickers = $scope.model.value ? angular.fromJson($scope.model.value) : getDefaultModel($scope.model.config);
-        console.log("$scope.pickers", $scope.pickers);
-        /*if (!$scope.model.value) {
-        $scope.pickers = []; console.log("getDefaultModel", getDefaultModel($scope.model.config)); // [];
-        } else {
-        $scope.pickers = angular.fromJson($scope.model.value);
-        }*/
         
         // init media and content name and icon from typeData id's
         angular.forEach($scope.pickers, function (obj) {
@@ -484,10 +457,8 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
             
             if (contentId) {
                 entityResource.getById(contentId, "Document").then(function (content) {
-                    console.log("content", content);
                     //only show non-trashed items
                     if (content.parentId >= -1) {
-
                         obj.content = { "name": content.name, "icon": getSafeIcon(content.icon) };
                     }
                 });
@@ -495,7 +466,6 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
             
             if (mediaId) {
                 entityResource.getById(mediaId, "Media").then(function (media) {
-                    console.log("media", media);
                     //only show non-trashed items
                     if (media.parentId >= -1) {
 
@@ -504,35 +474,12 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
                         }
 
                         obj.media = { "name": media.name, "thumbnail": media.thumbnail, "icon": getSafeIcon(media.icon) };
-                        //console.log("obj.media ", obj.media);
                     }
                 });
                 //Todo: handle scenario where selected media has been deleted
             }
-        });        
+        });
         
-
-        /*if (!$scope.model.value || !$scope.model.value.type) {
-        var defaultType = "content";
-
-        if ($scope.model.config.defaultType) {
-        defaultType = $scope.model.config.defaultType;
-        }
-
-        console.log($scope.pickers);
-        //var pickerObj = { "type": defaultType, "meta": { "title": "", "newWindow": false }, "typeData": { "url": "", "contentId": null, "mediaId": null } };
-        //$scope.pickers.push(pickerObj);
-
-        //$scope.model.value = angular.toJson($scope.pickers, true);
-        }*/
-
-        /*if ($scope.model.value.typeData && $scope.model.value.typeData.contentId) {
-        $scope.contentName = getEntityName($scope.model.value.typeData.contentId, "Document");
-        }
-
-        if ($scope.model.value.typeData && $scope.model.value.typeData.mediaId) {
-        $scope.mediaName =  getEntityName($scope.model.value.typeData.mediaId, "Media");
-        }*/
     }
 
     $scope.sync = function () {
@@ -543,26 +490,7 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
             delete v.media;
             delete v.content;
         });
-        console.log("sync");
-        console.log($scope.pickers);
-        console.log(array);
 
         $scope.model.value = angular.toJson(array, true);
     };
-
-    /*$scope.$watch('model.value', function (newval, oldval) {
-        //console.log(newval, oldval);
-
-        if (newval !== oldval) {
-            //run after DOM is loaded
-            $timeout(function () {
-                if (!alreadyDirty) {
-                    var currForm = angularHelper.getCurrentForm($scope);
-                    currForm.$setDirty();
-                    alreadyDirty = true;
-                }
-            }, 0);
-        }
-    }, true);*/
-
 });

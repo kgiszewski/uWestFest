@@ -2,6 +2,8 @@
 <language>
   <area alias="urlPicker">
     <key alias="addItem">Tilføj element</key>
+    <key alias="enable">Aktiver</key>
+    <key alias="disable">Deaktiver</key>
     <key alias="add">Tilføj</key>
     <key alias="move">Flyt</key>
     <key alias="remove">Fjern</key>

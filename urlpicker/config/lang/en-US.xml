@@ -2,6 +2,8 @@
 <language>
   <area alias="urlPicker">
     <key alias="addItem">Add item</key>
+    <key alias="enable">Enable</key>
+    <key alias="disable">Disable</key>
     <key alias="add">Add</key>
     <key alias="move">Move</key>
     <key alias="remove">Remove</key>
