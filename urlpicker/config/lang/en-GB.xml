@@ -6,7 +6,7 @@
     <key alias="url">URL</key>
     <key alias="content">Content</key>
     <key alias="media">Media</key>
-    <key alias="select">Select...</key>
-    <key alias="urlPlaceholder">ex. http://, https:// or www.</key>
+    <key alias="select">Select</key>
+    <key alias="urlPlaceholder">eg. http://, https:// or www.</key>
   </area>
 </language>
