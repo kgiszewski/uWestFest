@@ -62,7 +62,7 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
                             media.thumbnail = mediaHelper.resolveFileFromEntity(media, true);
                         }
 
-                        picker.media = { "name": media.name, "thumbnail": media.thumbnail, "icon": media.icon };
+                        picker.media = { "name": media.name, "thumbnail": media.thumbnail, "icon": getSafeIcon(media.icon) };
 
                         //$scope.model.value.typeData.mediaId = data.id;
                         //$scope.mediaName = getEntityName(data.id, "Media");
@@ -88,12 +88,7 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
                     var content = data;
                     console.log("content", content);
 
-                    // fix icon if it is a legacy icon
-                    if (iconHelper.isLegacyIcon(content.icon)) {
-                        content.icon = iconHelper.convertFromLegacyIcon(content.icon);
-                    }
-
-                    picker.content = { "name": content.name, "icon": content.icon };
+                    picker.content = { "name": content.name, "icon": getSafeIcon(content.icon) };
 
                     //$scope.model.value.typeData.contentId = data.id;
                     //$scope.contentName = getEntityName(data.id, "Document");
@@ -349,6 +344,14 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
     function isNullOrEmpty(value) {
         return value == null || value == "";
     }
+    
+    function getSafeIcon(icon) {
+        // fix icon if it is a legacy icon
+        if (iconHelper.isLegacyIcon(icon)) {
+            return iconHelper.convertFromLegacyIcon(icon);
+        }
+        return icon;
+    }
 
     function getStartNodeId(type) {
         if (type == "content") {
@@ -464,32 +467,50 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
         } else {
         $scope.pickers = angular.fromJson($scope.model.value);
         }*/
-
-        if ($scope.model.config.mediaPreview) {
-            angular.forEach($scope.pickers, function (obj) {
-                var mediaId;
-                if (obj.typeData && obj.typeData.mediaId) {
-                    mediaId = obj.typeData.mediaId;
+        
+        // init media and content name and icon from typeData id's
+        angular.forEach($scope.pickers, function (obj) {
+            var contentId;
+            var mediaId;
+                
+            if(obj.typeData) {
+                if (obj.typeData.contentId) {
+                    contentId = obj.typeData.contentId;
                 };
+                if (obj.typeData.mediaId) {
+                    mediaId = obj.typeData.mediaId;
+                };   
+            }
+            
+            if (contentId) {
+                entityResource.getById(contentId, "Document").then(function (content) {
+                    console.log("content", content);
+                    //only show non-trashed items
+                    if (content.parentId >= -1) {
 
-                if (mediaId) {
-                    entityResource.getById(mediaId, "Media").then(function (media) {
-                        console.log("media", media);
-                        //only show non-trashed items
-                        if (media.parentId >= -1) {
+                        obj.content = { "name": content.name, "icon": getSafeIcon(content.icon) };
+                    }
+                });
+            }
+            
+            if (mediaId) {
+                entityResource.getById(mediaId, "Media").then(function (media) {
+                    console.log("media", media);
+                    //only show non-trashed items
+                    if (media.parentId >= -1) {
 
-                            if (!media.thumbnail) {
-                                media.thumbnail = mediaHelper.resolveFileFromEntity(media, true);
-                            }
-
-                            obj.media = { "name": media.name, "thumbnail": media.thumbnail, "icon": media.icon };
-                            //console.log("obj.media ", obj.media);
+                        if (!media.thumbnail) {
+                            media.thumbnail = mediaHelper.resolveFileFromEntity(media, true);
                         }
-                    });
-                    //Todo: handle scenario where selected media has been deleted
-                }
-            });
-        }
+
+                        obj.media = { "name": media.name, "thumbnail": media.thumbnail, "icon": getSafeIcon(media.icon) };
+                        //console.log("obj.media ", obj.media);
+                    }
+                });
+                //Todo: handle scenario where selected media has been deleted
+            }
+        });        
+        
 
         /*if (!$scope.model.value || !$scope.model.value.type) {
         var defaultType = "content";
