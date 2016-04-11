@@ -1,5 +1,5 @@
 <div ng-controller="UrlPickerController" class="url-picker">
-	{{pickers | json}}
+	<!--{{pickers | json}}-->
 	<ul ui-sortable="sortableOptions" ng-model="pickers" class="picker-wrapper" ng-show="!showAddButton()">
 		<li ng-repeat="picker in pickers" ng-class="{ 'unsortable': !model.config.multipleItems || pickers.length <= 1 }">
 			<div class="panel panel-default" ng-class="{ 'dimmed': picker.disabled, 'collapsed': !picker.active }">
@@ -11,11 +11,10 @@
 							<span ng-show="!picker.active"><span class="icon-edit"></span>&nbsp;Edit</span>
 							<span ng-show="picker.active"><span class="icon-edit"></span>&nbsp;Close</span>
 						</a>-->
-						<i class="icon icon-add" ng-click="addItem(picker, $event)" ng-show="canAdd()" title="Add"></i>
-						<i class="icon icon-navigation handle" ng-show="canSort()" title="Move"></i>
+						<i class="icon icon-add" ng-click="addItem(picker, $event)" ng-show="canAdd()" localize="title" title="@urlPicker_add"></i>
+						<i class="icon icon-navigation handle" ng-show="canSort()" localize="title" title="@urlPicker_move"></i>
 						<i class="icon icon-power" ng-click="enableDisable(picker, $event)" ng-show="canDisable()" ng-attr-title="{{ picker.disabled ? 'Enable' : 'Disable' }}"></i>
-						<i class="icon icon-delete" ng-click="removeItem(picker, $event)" ng-show="canRemove()" title="Remove"></i>
-	                	<!--<a href="#" ng-click="removeItem(picker)" ng-show="canRemoveItem()" class="no-drag" prevent-default><span class="icon-delete"></span>&nbsp;Remove</span></a>-->
+						<i class="icon icon-delete" ng-click="removeItem(picker, $event)" ng-show="canRemove()" localize="title" title="@urlPicker_remove"></i>
                 	</div>
                 </div>
 
@@ -71,5 +70,5 @@
 			</div>
 		</li>
     </ul>
-	<a href="#" ng-click="addItem(null, $event)" ng-show="showAddButton()" prevent-default><i class="icon icon-add blue"></i> Add Item</a>
+	<a href="#" ng-click="addItem(null, $event)" ng-show="showAddButton()" prevent-default><i class="icon icon-add blue"></i> <localize key="urlPicker_addItem">Add item</localize></a>
 </div>
