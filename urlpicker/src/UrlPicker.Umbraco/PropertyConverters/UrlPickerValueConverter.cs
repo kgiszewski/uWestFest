@@ -6,6 +6,8 @@ using Umbraco.Web;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.PropertyEditors;
 using Umbraco.Core.Logging;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace UrlPicker.Umbraco.PropertyConverters
 {
@@ -31,54 +33,58 @@ namespace UrlPicker.Umbraco.PropertyConverters
             {
                 try
                 {
-                    var urlPicker = JsonConvert.DeserializeObject<UrlPicker.Umbraco.Models.UrlPicker>(sourceString);
+                    var pickers = JsonConvert.DeserializeObject<IEnumerable<Models.UrlPicker>>(sourceString);
 
                     var helper = new UmbracoHelper(UmbracoContext.Current);
 
-                    if (urlPicker.TypeData.ContentId != null)
+                    foreach (var picker in pickers)
                     {
-                        urlPicker.TypeData.Content = helper.TypedContent(urlPicker.TypeData.ContentId);
+                        if (picker.TypeData.ContentId != null)
+                        {
+                            picker.TypeData.Content = helper.TypedContent(picker.TypeData.ContentId);
+                        }
+
+                        if (picker.TypeData.MediaId != null)
+                        {
+                            picker.TypeData.Media = helper.TypedMedia(picker.TypeData.MediaId);
+                        }
+
+                        switch (picker.Type)
+                        {
+                            case Models.UrlPicker.UrlPickerTypes.Content:
+
+                                if (picker.TypeData.Content != null)
+                                {
+                                    picker.Url = picker.TypeData.Content.Url;
+                                    picker.UrlAbsolute = picker.TypeData.Content.UrlAbsolute();
+                                    picker.Name = (picker.Meta.Title.IsNullOrWhiteSpace()) ? picker.TypeData.Content.Name : picker.Meta.Title;
+                                }                         
+                                break;
+
+                            case Models.UrlPicker.UrlPickerTypes.Media:
+                                if (picker.TypeData.Media != null)
+                                {
+                                    picker.Url = picker.TypeData.Media.Url;
+                                    picker.UrlAbsolute = picker.TypeData.Media.Url();
+                                    picker.Name = (picker.Meta.Title.IsNullOrWhiteSpace()) ? picker.TypeData.Media.Name : picker.Meta.Title;
+                                }
+                                break;
+
+                            default:
+                                picker.Url = picker.TypeData.Url;
+                                picker.UrlAbsolute = picker.TypeData.Url;
+                                picker.Name = (picker.Meta.Title.IsNullOrWhiteSpace()) ? picker.TypeData.Url : picker.Meta.Title;
+                                break;
+                        }
+
                     }
 
-                    if (urlPicker.TypeData.MediaId != null)
-                    {
-                        urlPicker.TypeData.Media = helper.TypedMedia(urlPicker.TypeData.MediaId);
-                    }
-
-                    switch (urlPicker.Type)
-                    {
-                        case UrlPicker.Umbraco.Models.UrlPicker.UrlPickerTypes.Content:
-
-                            if (urlPicker.TypeData.Content != null)
-                            {
-                                urlPicker.Url = urlPicker.TypeData.Content.Url;
-                                urlPicker.UrlAbsolute = urlPicker.TypeData.Content.UrlAbsolute();
-                                urlPicker.Name = (urlPicker.Meta.Title.IsNullOrWhiteSpace()) ? urlPicker.TypeData.Content.Name : urlPicker.Meta.Title;
-                            }                         
-                            break;
-
-                        case UrlPicker.Umbraco.Models.UrlPicker.UrlPickerTypes.Media:
-                            if (urlPicker.TypeData.Media != null)
-                            {
-                                urlPicker.Url = urlPicker.TypeData.Media.Url;
-                                urlPicker.UrlAbsolute = urlPicker.TypeData.Media.UrlAbsolute();
-                                urlPicker.Name = (urlPicker.Meta.Title.IsNullOrWhiteSpace()) ? urlPicker.TypeData.Media.Name : urlPicker.Meta.Title;
-                            }
-                            break;
-
-                        default:
-                            urlPicker.Url = urlPicker.TypeData.Url;
-                            urlPicker.UrlAbsolute = urlPicker.TypeData.Url;
-                            urlPicker.Name = (urlPicker.Meta.Title.IsNullOrWhiteSpace()) ? urlPicker.TypeData.Url : urlPicker.Meta.Title;
-                            break;
-                    }
-
-                    return urlPicker;
+                    return pickers;
                 }
                 catch (Exception ex)
                 {
                     LogHelper.Error<UrlPickerValueConverter>(ex.Message, ex);
-                    return new UrlPicker.Umbraco.Models.UrlPicker();
+                    return new List<UrlPicker.Umbraco.Models.UrlPicker>();
                 }
             }
 

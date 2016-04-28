@@ -1,9 +1,37 @@
 .url-picker {
+    
+    [ng-click],
+    [data-ng-click],
+    [x-ng-click] {
+        cursor: pointer;
+    }
+    
+    .truncate {
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+	}
 
 	.link-meta {
-		input[type=text] {
-			width: 265px;
-		}
+        .control-group {
+            display: flex;
+            
+            &.link-title {
+                label {
+                    margin-right: 8px;
+                    margin-bottom: 0;
+                    line-height: 30px;
+                }
+                input[type=text] {
+                    width: 265px;
+                    flex: 1;
+                }
+            }
+            &.link-newwindow {
+                margin-bottom: 10px;
+            }
+        }
 	}
 
 	.control-group {
@@ -14,16 +42,27 @@
 		}
 	}
 
-	ul {
+	ul.nav-tabs {
 		margin-bottom: 0;
-		width: 322px;
+		width: auto;
 	}
 
 	.tab-body {
 		border: 1px solid #e3e3e3;
 		border-top: 0 none;
 		padding: 10px;
-		width: 300px;
+		width: auto;
+        
+        .select {
+            display: inline-block;
+            overflow: hidden;
+            margin-right: 3px;
+        }
+        
+        .truncate {
+            width: ~"calc(100% - 100px)";
+            display: inline-block;
+        }
 
 		input[type=text] {
 			width: 88%;
@@ -38,7 +77,7 @@
 		}
 	}
 
-    .delete-icon{
+    .delete-icon {
         float: right;
     }
 
@@ -73,5 +112,124 @@
 	    line-height: 70px;
 	}
 
+	.picker-wrapper {
+	    margin: 0;
+	    padding: 0;
+	    list-style: none;
+	    width: 400px;
+	    max-width: 100%;
+        
+        /* sortable placeholder */
+        .sortable-placeholder {
+            background-color: #f5f5f5;
+            border: 1px dashed #ddd;
+            margin-bottom: 10px;
+            border-radius: 3px;
+            opacity: 0.5;
+        }
+        
+	    li {
+            
+            .panel-heading i {
+                cursor: pointer;
+            }
 
+	    	.cursor-move, .handle, .panel-heading i.handle {
+			  cursor: move;
+			}
+
+			.no-drag,
+			&.unsortable .handle {
+			  cursor: auto;
+			}
+	    }
+	}
+
+	/* panels */
+	.panel {
+	  margin-bottom: 10px;
+	  background-color: #fff;
+	  border: 1px solid transparent;
+	  border-radius: 4px;
+	  /*-webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+	  box-shadow: 0 1px 1px rgba(0,0,0,0.05);*/
+      
+      &.panel-default {
+    	border-color: #ddd;
+        
+        > .panel-heading {
+	       color: #333;
+	       background-color: #f5f5f5;
+	       border-color: #ddd;
+	    }
+	  }
+      
+      .panel-heading {
+        padding: 10px 15px;
+        border-bottom: 1px solid transparent;
+        border-top-right-radius: 3px;
+        border-top-left-radius: 3px;
+        position: relative;
+        
+        .caret { 
+            margin-top: 8px;
+            margin-right: 5px;
+            transform: rotate(0);
+        }
+        .caret + span > .icon { 
+            margin-right: 3px;
+        }
+        .truncate {
+            width: ~"calc(100% - 120px)";
+            display: inline-block;
+            // add negative margin-bottom as display:inline-block + overflow:hidden
+            // seems to add extra height of element
+            margin-bottom: -3px;
+        }
+        .picker-controls {
+            -webkit-user-select: none; 
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+	  }
+      
+      &.dimmed {
+         border-style: dashed;
+         
+         .panel-heading {
+            color: #d9d9d9;
+            
+            .picker-controls i:hover {
+                color: #b7b7b7;
+            }
+        }
+         .panel-body {
+            opacity: 0.5;
+        } 
+      } 
+      
+      .panel-title {
+        margin-top: 0;
+        margin-bottom: 0;
+        font-size: 16px;
+        line-height: 1.4;
+        display: inline-block;
+        }
+
+        .panel-body {
+            padding: 15px;
+        }
+        
+        &.collapsed {
+            .panel-heading {
+                border-bottom: none;
+                .caret { transform: rotate(-90deg); }
+            }
+            .panel-body {
+                display: none;
+            }
+        }
+      
+	}
 }

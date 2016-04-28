@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language>
+  <area alias="urlPicker">
+    <key alias="addItem">Add item</key>
+    <key alias="enable">Enable</key>
+    <key alias="disable">Disable</key>
+    <key alias="add">Add</key>
+    <key alias="move">Move</key>
+    <key alias="remove">Remove</key>
+    <key alias="title">Title</key>
+    <key alias="newWindow">Open in new window?</key>
+    <key alias="url">URL</key>
+    <key alias="content">Content</key>
+    <key alias="media">Media</key>
+    <key alias="select">Select</key>
+    <key alias="urlPlaceholder">eg. http://, https:// or www.</key>
+  </area>
+</language>
