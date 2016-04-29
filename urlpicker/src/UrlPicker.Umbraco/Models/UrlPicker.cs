@@ -10,6 +10,7 @@ namespace UrlPicker.Umbraco.Models
         public string Url { get; set; }
         public string UrlAbsolute { get; set; }
         public string Name { get; set; }
+        public bool Disabled { get; set; }
         public enum UrlPickerTypes { Url, Content, Media };
         public IHtmlString Target
         {

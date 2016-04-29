@@ -34,6 +34,18 @@
             view: "boolean"
           },
           {
+            label: "Multiple items",
+            description: "Multiple items allowed",
+            key: "multipleItems",
+            view: "boolean"
+          },
+          {
+            label: "Maximum items",
+            description: "Maximum number of items the editor can add if multiple items is allowed",
+            key: "maxItems",
+            view: "number"
+          },
+          {
             label: "Hide Title",
             description: "Hides the title field",
             key: "hideTitle",
@@ -68,6 +80,30 @@
             description: "Choose which type the picker defaults to.",
             key: "defaultType",
             view: "~/App_Plugins/UrlPicker/views/default.type.html"
+          },
+          {
+            label: "Start with add button?",
+            description: "Empty property shows an add button instead of providing a default picker.",
+            key: "startWithAddButton",
+            view: "boolean"
+          },
+          {
+            label: "Enable Picker Disabling?",
+            description: "Allows pickers to be individually enabled/disabled.",
+            key: "enableDisabling",
+            view: "boolean"
+          },
+          {
+            label: "One picker open at time?",
+            description: "Choose if only one picker should be open at time.",
+            key: "oneAtATime",
+            view: "boolean"
+          },
+          {
+            label: "Use picker icons?",
+            description: "Choose if pickers should use icon in header.",
+            key: "usePickerIcons",
+            view: "boolean"
           }
         ]
       }
@@ -80,4 +116,3 @@
     "~/App_Plugins/UrlPicker/js/url.picker.js"
   ]
 }
-

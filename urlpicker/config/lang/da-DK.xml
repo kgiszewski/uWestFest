@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language>
+  <area alias="urlPicker">
+    <key alias="addItem">Tilføj element</key>
+    <key alias="enable">Aktiver</key>
+    <key alias="disable">Deaktiver</key>
+    <key alias="add">Tilføj</key>
+    <key alias="move">Flyt</key>
+    <key alias="remove">Fjern</key>
+    <key alias="title">Titel</key>
+    <key alias="newWindow">Åbn i nyt vindue?</key>
+    <key alias="url">URL</key>
+    <key alias="content">Indhold</key>
+    <key alias="media">Medie</key>
+    <key alias="select">Vælg</key>
+    <key alias="urlPlaceholder">f.eks. http://, https:// eller www.</key>
+  </area>
+</language>
