@@ -1,0 +1,13 @@
+{
+  "ambientDependencies": {
+    "angular": "registry:dt/angular#1.5.0+20160509150441",
+    "jquery": "registry:dt/jquery#1.10.0+20160417213236",
+    "jqueryui": "registry:dt/jqueryui#1.9.0+20160509160024",
+    "umbraco": "registry:dt/umbraco#0.0.0+20160317120654",
+    "umbraco-resources": "registry:dt/umbraco-resources#7.2.8+20160317120654",
+    "umbraco-services": "registry:dt/umbraco-services#7.2.8+20160317120654"
+  },
+  "ambientDevDependencies": {
+    "typescript": "registry:dt/typescript#0.4.0+20160317120654"
+  }
+}

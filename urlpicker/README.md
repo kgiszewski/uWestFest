@@ -8,9 +8,13 @@ Install via NuGet or the Umbraco Package Installer: https://github.com/imulus/uW
 
 ### Install Dependencies
 
+*NOTE: typings for `umbraco.services` and `umbraco.resources` are a little behind; use `git checkout -- typings` after running `typings install` and reference repository versions until resolved* 
+
 ```bash
 npm install -g grunt-cli
 npm install
+typings install
+git checkout -- typings
 ```
 
 ### Build
@@ -25,3 +29,8 @@ grunt
 grunt watch
 ```
 
+### tslint
+
+```bash
+grunt tslint
+```
