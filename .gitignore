@@ -60,3 +60,4 @@ VersionInfo.cs
 .svn
 .hg
 .hgignore
+.vs

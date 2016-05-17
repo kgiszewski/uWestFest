@@ -1,4 +1,4 @@
-<div ng-controller="UrlPickerController" class="url-picker">
+﻿<div ng-controller="UrlPicker.Controllers.UrlPickerController" class="url-picker">
 	<ul ui-sortable="sortableOptions" ng-model="pickers" class="picker-wrapper" ng-show="!showAddButton()">
 		<li ng-repeat="picker in pickers" ng-class="{ 'unsortable': !model.config.multipleItems || pickers.length <= 1 }">
 			<div class="panel panel-default" ng-class="{ 'dimmed': picker.disabled, 'collapsed': !picker.active }">
@@ -17,10 +17,10 @@
             	<div class="panel-body">
 					<div class="link-meta">
 						<div class="row control-group link-title" ng-hide="model.config.hideTitle">
-							<label for="urlPickerTitle-{{$index + 1}}"><localize key="urlPicker_title">Title</localize></label> <input id="urlPickerTitle-{{$index + 1}}" type="text" ng-model="picker.meta.title" />
+							<label for="urlPickerTitle-{{$index + 1}}"><localize key="urlPicker_title">Title</localize></label> <input id="urlPickerTitle-{{$index + 1}}" type="text" ng-model="picker.meta.title" ng-change="setDirty()" />
 						</div>
 						<div class="row control-group link-newwindow" ng-hide="model.config.hideOpenNew">
-							<label><localize key="urlPicker_newWindow">Open in new window?</localize>&nbsp;&nbsp;<input type="checkbox" ng-model="picker.meta.newWindow" /></label>
+							<label><localize key="urlPicker_newWindow">Open in new window?</localize>&nbsp;&nbsp;<input type="checkbox" ng-model="picker.meta.newWindow" ng-change="setDirty()"/></label>
 						</div>
 					</div>
 
@@ -38,7 +38,7 @@
 
 					<div class="tab-body">
 						<div ng-show="picker.type == 'url'">
-							<input type="text" ng-model="picker.typeData.url" localize="placeholder" placeholder="@urlPicker_urlPlaceholder" />
+							<input type="text" ng-model="picker.typeData.url" ng-change="setDirty()" localize="placeholder" placeholder="@urlPicker_urlPlaceholder" />
 							<a href class="delete-icon url-delete" ng-click="resetType('url', picker)"><i class="icon icon-delete" ng-show="picker.typeData.url"></i></a>
 						</div>
 						<div ng-show="picker.type == 'content'">

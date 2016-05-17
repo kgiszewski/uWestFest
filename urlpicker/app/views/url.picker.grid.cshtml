@@ -1,0 +1,38 @@
+﻿@inherits UmbracoViewPage<dynamic>
+@using Umbraco.Core.Logging
+@using Umbraco.Web.Mvc
+@using Umbraco.Web
+@using UrlPicker.Umbraco.Extensions
+@using UrlPicker.Umbraco.Models
+
+@try
+{
+    if (Model.value != null && Extensions.DetectIsJson(Model.value.ToString()))
+    {
+        var cssClass = string.Empty;
+        if (Model.editor != null && Model.editor.config != null && Model.editor.config.cssClass != null && !string.IsNullOrEmpty(Model.editor.config.cssClass.ToString()))
+        {
+            cssClass = Model.editor.config.cssClass;
+        }
+        var helper = new UmbracoHelper(UmbracoContext.Current);
+        var pickers =  Extensions.AsTyped(helper, Model.value.ToString());
+        foreach (var picker in pickers)
+        {
+            if (!string.IsNullOrEmpty(picker.Url))
+            {
+
+                <a class="@cssClass" @picker.Target href="@picker.Url" title="@picker.Name">@picker.Name</a>
+            }
+        }
+    }
+}
+catch (Exception ex)
+{
+    LogHelper.Error<UrlPicker>(ex.Message, ex);
+    if (Members.IsLoggedIn() || UmbracoContext.InPreviewMode || UmbracoContext.IsDebug)
+    {
+        <div data-alert class="alert-box alert">
+            "We're sorry there was a problem displaying this part of the page; please review content.";
+        </div>
+    }
+}
