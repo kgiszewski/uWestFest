@@ -6,12 +6,11 @@ using Umbraco.Web;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.PropertyEditors;
 using Umbraco.Core.Logging;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace UrlPicker.Umbraco.PropertyConverters
 {
-    [PropertyValueType(typeof(UrlPicker.Umbraco.Models.UrlPicker))]
+    [PropertyValueType(typeof(IEnumerable<UrlPicker.Umbraco.Models.UrlPicker>))]
     [PropertyValueCache(PropertyCacheValue.All, PropertyCacheLevel.Content)]
     public class UrlPickerValueConverter : PropertyValueConverterBase
     {
