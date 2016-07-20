@@ -228,6 +228,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cache\LocalCache.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Helpers\ConverterHelper.cs" />
     <Compile Include="Models\Meta.cs" />
