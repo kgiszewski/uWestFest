@@ -144,10 +144,6 @@ namespace UrlPicker.Umbraco.PropertyConverters
         {
             var dts = ApplicationContext.Current.Services.DataTypeService;
 
-            var a =
-                dts.GetPreValuesCollectionByDataTypeId(dataTypeId)
-                    .PreValuesAsDictionary;
-
             var multiPickerPreValue =
                 dts.GetPreValuesCollectionByDataTypeId(dataTypeId)
                     .PreValuesAsDictionary.FirstOrDefault(
