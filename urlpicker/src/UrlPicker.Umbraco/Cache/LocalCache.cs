@@ -17,5 +17,11 @@ namespace UrlPicker.Umbraco.Cache
             var runtimeCache = ApplicationContext.Current.ApplicationCache.RuntimeCache;
             runtimeCache.InsertCacheItem(cacheKey, getCacheItem);
         }
+
+        internal static void ClearLocalCacheItem(string key)
+        {
+            var runtimeCache = ApplicationContext.Current.ApplicationCache.RuntimeCache;
+            runtimeCache.ClearCacheItem(key);
+        }
     }
 }
