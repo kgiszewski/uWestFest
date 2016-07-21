@@ -6,25 +6,24 @@ using Umbraco.Web;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.PropertyEditors;
 using Umbraco.Core.Logging;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using UrlPicker.Umbraco.Helpers;
 
 namespace UrlPicker.Umbraco.PropertyConverters
 {
-    [PropertyValueType(typeof(UrlPicker.Umbraco.Models.UrlPicker))]
-    [PropertyValueCache(PropertyCacheValue.All, PropertyCacheLevel.Content)]
-    public class UrlPickerValueConverter : PropertyValueConverterBase
+    public class UrlPickerValueConverter : PropertyValueConverterBase, IPropertyValueConverterMeta
     {
         public override bool IsConverter(PublishedPropertyType propertyType)
         {
             return propertyType.PropertyEditorAlias.Equals("Imulus.UrlPicker");
         }
 
-        public override object ConvertDataToSource(PublishedPropertyType propertyType, object source, bool preview)
+        public override object ConvertSourceToObject(PublishedPropertyType propertyType, object source, bool preview)
         {
             if (source == null)
             {
-                return new UrlPicker.Umbraco.Models.UrlPicker();
+                return new Models.UrlPicker();
             }
 
             var sourceString = source.ToString();
@@ -58,7 +57,7 @@ namespace UrlPicker.Umbraco.PropertyConverters
                                     picker.Url = picker.TypeData.Content.Url;
                                     picker.UrlAbsolute = picker.TypeData.Content.UrlAbsolute();
                                     picker.Name = (picker.Meta.Title.IsNullOrWhiteSpace()) ? picker.TypeData.Content.Name : picker.Meta.Title;
-                                }                         
+                                }
                                 break;
 
                             case Models.UrlPicker.UrlPickerTypes.Media:
@@ -78,17 +77,79 @@ namespace UrlPicker.Umbraco.PropertyConverters
                         }
 
                     }
-
-                    return pickers;
+                    if (IsMultipleDataType(propertyType.DataTypeId))
+                    {
+                        return pickers.Yield().Where(x => x != null);
+                    }
+                    else
+                    {
+                        return pickers.FirstOrDefault();
+                    }
+                        
                 }
                 catch (Exception ex)
                 {
                     LogHelper.Error<UrlPickerValueConverter>(ex.Message, ex);
-                    return new List<UrlPicker.Umbraco.Models.UrlPicker>();
+                    if (IsMultipleDataType(propertyType.DataTypeId))
+                    {
+                        return Enumerable.Empty<Models.UrlPicker>();
+                    }
+                    else
+                    {
+                        return new Models.UrlPicker();
+                    }
                 }
             }
 
             return sourceString;
+        }
+
+        public Type GetPropertyValueType(PublishedPropertyType propertyType)
+        {
+            return IsMultipleDataType(propertyType.DataTypeId) ? typeof(IEnumerable<Models.UrlPicker>) : typeof(Models.UrlPicker);
+        }
+
+        public PropertyCacheLevel GetPropertyCacheLevel(PublishedPropertyType propertyType, PropertyCacheValue cacheValue)
+        {
+            PropertyCacheLevel returnLevel;
+            switch (cacheValue)
+            {
+                case PropertyCacheValue.Object:
+                    returnLevel = PropertyCacheLevel.ContentCache;
+                    break;
+                case PropertyCacheValue.Source:
+                    returnLevel = PropertyCacheLevel.Content;
+                    break;
+                case PropertyCacheValue.XPath:
+                    returnLevel = PropertyCacheLevel.Content;
+                    break;
+                default:
+                    returnLevel = PropertyCacheLevel.None;
+                    break;
+            }
+
+            return returnLevel;
+        }
+
+        /// <summary>
+        /// The is multiple data type.
+        /// </summary>
+        /// <param name="dataTypeId">
+        /// The data type id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        private bool IsMultipleDataType(int dataTypeId)
+        {
+            var dts = ApplicationContext.Current.Services.DataTypeService;
+
+            var multiPickerPreValue =
+                dts.GetPreValuesCollectionByDataTypeId(dataTypeId)
+                    .PreValuesAsDictionary.FirstOrDefault(
+                        x => string.Equals(x.Key, "multipleItems", StringComparison.InvariantCultureIgnoreCase)).Value;
+
+            return multiPickerPreValue != null && multiPickerPreValue.Value.TryConvertTo<bool>().Result;
         }
     }
 }
