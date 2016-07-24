@@ -42,7 +42,6 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
                 callback: function (data) {
 
                     var media = data;
-                    console.log("media", media);
 
                     //only show non-trashed items
                     if (media.parentId >= -1) {
@@ -216,8 +215,7 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
             $scope.pickers.push(pickerObj);
             $scope.pickers[$scope.pickers.length - 1].active = true;
         }
-
-        console.log("$scope.sync()");
+        
         $scope.sync();
 
         // explicitly set the form as dirty when manipulating the enabled/disabled state of a picker
