@@ -486,4 +486,13 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
 
         $scope.model.value = angular.toJson(array, true);
     };
+    
+    var unsubscribe = $scope.$on("formSubmitting", function (ev, args) {
+        $scope.sync();
+    });
+
+    //when the scope is destroyed we need to unsubscribe
+    $scope.$on('$destroy', function () {
+        unsubscribe();
+    });
 });
