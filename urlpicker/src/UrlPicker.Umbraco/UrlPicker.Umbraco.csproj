@@ -145,6 +145,7 @@
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>False</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
@@ -228,6 +229,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cache\Events.cs" />
+    <Compile Include="Cache\LocalCache.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Helpers\ConverterHelper.cs" />
     <Compile Include="Models\Meta.cs" />
