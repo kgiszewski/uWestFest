@@ -1,0 +1,11 @@
+{
+	"name": "appveyorpatch",
+	"description": "All NodeJs stuff needed to be cool",
+	"repository": "",
+	"license": "UNLICENSED",
+	"version": "1.0.0",
+	"dependencies": {
+		"jsonfile": "^2.2.3",
+		"semver": "^5.0.3"
+	}
+}

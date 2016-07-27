@@ -1,0 +1,43 @@
+version: 0.16.0.{build}
+os: Visual Studio 2015
+
+cache:
+  - urlpicker\src\packages -> urlpicker\src\**\packages.config          # preserve "packages" directory but will reset it if packages.config is modified
+  - urlpicker\node_modules                                # local npm modules
+  - '%APPDATA%\npm-cache'                                 # npm cache
+  - '%APPDATA%\npm'                                       # npm global
+
+configuration: Release
+
+environment:
+  version_suffix: alpha
+
+install:
+  - ps: .\appveyor\appveyor-semver.ps1
+  - ps: Update-AppveyorBuild -Version $Env:appveyor_version
+  - cmd: npm install -g grunt
+  - cmd: nuget update -Self
+  - cmd: node --version
+  - cmd: npm --version
+  - cmd: appveyor\appveyor-package-version-patch.cmd
+
+assembly_info:
+  patch: true
+  file: 'urlpicker\src\**\AssemblyInfo.*'
+  assembly_version: '$(appveyor_build_version)'
+  assembly_file_version: '$(appveyor_build_version)'
+  assembly_informational_version: '$(mssemver)'
+
+build_script:
+- cmd: >-
+    cd urlpicker
+
+    npm install
+
+    grunt umbraco
+
+    grunt nuget
+
+    appveyor PushArtifact "pkg/UrlPicker_%appveyor_version%.zip" -Type Zip
+
+    appveyor PushArtifact "pkg/UrlPicker.%appveyor_version%.nupkg" -Type NuGetPackage
