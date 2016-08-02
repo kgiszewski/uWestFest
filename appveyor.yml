@@ -12,6 +12,11 @@ configuration: Release
 environment:
   version_suffix: alpha
 
+branches:
+  only:
+    - develop
+    - master
+
 install:
   - ps: .\appveyor\appveyor-semver.ps1
   - ps: Update-AppveyorBuild -Version $Env:appveyor_version
@@ -41,3 +46,14 @@ build_script:
     appveyor PushArtifact "pkg/UrlPicker_%appveyor_version%.zip" -Type Zip
 
     appveyor PushArtifact "pkg/UrlPicker.%appveyor_version%.nupkg" -Type NuGetPackage
+
+deploy:
+      # Umbraco MyGet community feed
+  - provider: NuGet
+    server: https://www.myget.org/F/umbraco-packages/api/v2/package
+    symbol_server: https://nuget.symbolsource.org/MyGet/umbraco-packages
+    api_key:
+      secure: SASQGWG/4zNns7bwSSsJ5RPvKcKfJsBeEPuw69wsVPA3PO739QmzVtc5VwQwgvbr
+    artifact: /.*\.nupkg/
+    on:
+      branch: develop
