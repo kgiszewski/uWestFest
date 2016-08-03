@@ -12,6 +12,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{0FEB49
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{949E6642-124B-46D4-A229-DD47A8BBA575}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\appveyor\appveyor-package-version-patch.cmd = ..\..\appveyor\appveyor-package-version-patch.cmd
+		..\..\appveyor\appveyor-package-version-patch.js = ..\..\appveyor\appveyor-package-version-patch.js
+		..\..\appveyor\appveyor-semver.ps1 = ..\..\appveyor\appveyor-semver.ps1
+		..\..\appveyor.yml = ..\..\appveyor.yml
+		..\..\appveyor\package.json = ..\..\appveyor\package.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

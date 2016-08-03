@@ -8,6 +8,7 @@ using Umbraco.Core.PropertyEditors;
 using Umbraco.Core.Logging;
 using System.Collections.Generic;
 using System.Linq;
+using UrlPicker.Umbraco.Cache;
 using UrlPicker.Umbraco.Helpers;
 
 namespace UrlPicker.Umbraco.PropertyConverters
@@ -142,6 +143,14 @@ namespace UrlPicker.Umbraco.PropertyConverters
         /// </returns>
         private bool IsMultipleDataType(int dataTypeId)
         {
+            var cacheKey = string.Format("{0}{1}", Constants.Keys.CachePrefix, dataTypeId);
+
+            var cachedValue = LocalCache.GetLocalCacheItem<bool?>(cacheKey);
+            if (cachedValue != null)
+            {
+                return (bool) cachedValue;
+            }
+
             var dts = ApplicationContext.Current.Services.DataTypeService;
 
             var multiPickerPreValue =
@@ -149,7 +158,17 @@ namespace UrlPicker.Umbraco.PropertyConverters
                     .PreValuesAsDictionary.FirstOrDefault(
                         x => string.Equals(x.Key, "multipleItems", StringComparison.InvariantCultureIgnoreCase)).Value;
 
-            return multiPickerPreValue != null && multiPickerPreValue.Value.TryConvertTo<bool>().Result;
+            var multipleItems = false;
+
+            var attemptConvert = multiPickerPreValue.Value.TryConvertTo<bool>();
+
+            if (attemptConvert.Success)
+            {
+                multipleItems = attemptConvert.Result;
+            }
+
+            LocalCache.InsertLocalCacheItem<bool>(cacheKey, () => multipleItems);
+            return multipleItems;
         }
     }
 }
