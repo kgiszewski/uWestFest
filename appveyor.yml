@@ -10,7 +10,7 @@ cache:
 configuration: Release
 
 environment:
-  version_suffix: alpha
+  version_suffix: 
 
 branches:
   only:
