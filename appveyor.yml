@@ -43,9 +43,9 @@ build_script:
 
     grunt nuget
 
-    appveyor PushArtifact "pkg/UrlPicker_%appveyor_version%.zip" -Type Zip
+    appveyor PushArtifact "pkg/UrlPicker_%mssemver%.zip" -Type Zip
 
-    appveyor PushArtifact "pkg/UrlPicker.%appveyor_version%.nupkg" -Type NuGetPackage
+    appveyor PushArtifact "pkg/UrlPicker.%mssemver%.nupkg" -Type NuGetPackage
 
 deploy:
       # Umbraco MyGet community feed
