@@ -348,6 +348,13 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
     // Setup "render model" & defaults
     function init() {
 
+        // hack to update v0.14 or lower version items to new format
+        var stringValue = JSON.stringify($scope.model.value);
+        if (stringValue.substring(0, 1) === '{') {
+            var newStringValue = "[" + JSON.stringify($scope.model.value) + "]";
+            $scope.model.value = newStringValue;
+        }
+
         // content start node
         if (!$scope.model.config.contentStartNode)
             $scope.model.config.contentStartNode = -1;

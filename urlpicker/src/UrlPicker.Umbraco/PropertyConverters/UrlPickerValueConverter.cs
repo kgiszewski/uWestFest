@@ -33,6 +33,12 @@ namespace UrlPicker.Umbraco.PropertyConverters
             {
                 try
                 {
+                    // hack to update v0.14 or lower version items to new format
+                    if (sourceString.StartsWith("{"))
+                    {
+                        sourceString = string.Format("[{0}]", sourceString);
+                    }
+
                     var pickers = JsonConvert.DeserializeObject<IEnumerable<Models.UrlPicker>>(sourceString);
 
                     var helper = new UmbracoHelper(UmbracoContext.Current);
