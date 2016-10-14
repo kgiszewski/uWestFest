@@ -157,20 +157,28 @@ namespace UrlPicker.Umbraco.PropertyConverters
                 return (bool) cachedValue;
             }
 
-            var dts = ApplicationContext.Current.Services.DataTypeService;
-
-            var multiPickerPreValue =
-                dts.GetPreValuesCollectionByDataTypeId(dataTypeId)
-                    .PreValuesAsDictionary.FirstOrDefault(
-                        x => string.Equals(x.Key, "multipleItems", StringComparison.InvariantCultureIgnoreCase)).Value;
-
             var multipleItems = false;
 
-            var attemptConvert = multiPickerPreValue.Value.TryConvertTo<bool>();
-
-            if (attemptConvert.Success)
+            try
             {
-                multipleItems = attemptConvert.Result;
+                var dts = ApplicationContext.Current.Services.DataTypeService;
+
+                var multiPickerPreValue =
+                    dts.GetPreValuesCollectionByDataTypeId(dataTypeId)
+                        .PreValuesAsDictionary.FirstOrDefault(
+                            x => string.Equals(x.Key, "multipleItems", StringComparison.InvariantCultureIgnoreCase))
+                        .Value;
+
+                var attemptConvert = multiPickerPreValue.Value.TryConvertTo<bool>();
+
+                if (attemptConvert.Success)
+                {
+                    multipleItems = attemptConvert.Result;
+                }
+            }
+            catch
+            {
+                LogHelper.Warn(typeof(UrlPickerValueConverter), string.Format("Error finding multipleItems data type prevalue, likely you've updated UrlPicker, plesae resave data type with id:{0}", dataTypeId));                
             }
 
             LocalCache.InsertLocalCacheItem<bool>(cacheKey, () => multipleItems);
