@@ -237,6 +237,7 @@
     <Compile Include="Models\Meta.cs" />
     <Compile Include="Models\TypeData.cs" />
     <Compile Include="Models\UrlPicker.cs" />
+    <Compile Include="UrlPickerApiController.cs" />
     <Compile Include="PropertyConverters\UrlPickerValueConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

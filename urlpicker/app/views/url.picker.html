@@ -34,6 +34,9 @@
 						<li ng-class="{active: picker.type == 'media'}" ng-hide="model.config.hideMedia">
 							<a ng-click="switchType('media', picker)" href="#" prevent-default><localize key="urlPicker_media">Media</localize></a>
 						</li>
+						<li ng-class="{active: picker.type == type.alias }" ng-repeat="type in model.config.additionalTypes">
+							<a ng-click="switchType(type.alias, picker)" href="#" prevent-default>{{type.name}}</a>
+						</li>
 					</ul>
 
 					<div class="tab-body">
@@ -60,6 +63,9 @@
 									<small>{{picker.media.name}}</small>
 								</span>
 							</div>
+						</div>
+						<div ng-show="picker.type == type.alias" ng-repeat="type in model.config.additionalTypes">
+							<umb-editor ng-if="picker.propertyModels[type.alias]" model="picker.propertyModels[type.alias]"></umb-editor>
 						</div>
 					</div>
 				</div>

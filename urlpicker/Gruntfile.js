@@ -12,7 +12,9 @@ module.exports = function(grunt) {
       dist: {
         src: [
           'app/scripts/controllers/url.picker.controller.js',
-          'app/scripts/controllers/default.type.js'
+          'app/scripts/controllers/default.type.js',
+          'app/scripts/controllers/additional.types.controller.js',
+          'app/scripts/service.js'
         ],
         dest: '<%= basePath %>/js/url.picker.js',
         nonull: true

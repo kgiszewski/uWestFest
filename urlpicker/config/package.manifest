@@ -104,6 +104,12 @@
             description: "Choose if pickers should use icon in header.",
             key: "usePickerIcons",
             view: "boolean"
+          },
+          {
+            label: "Additional Types",
+            description: "Add additional tabs based on existing datatypes.",
+            key: "additionalTypes",
+            view: "~/App_Plugins/UrlPicker/views/additional.types.html"
           }
         ]
       }
