@@ -38,7 +38,7 @@
 
 					<div class="tab-body">
 						<div ng-show="picker.type == 'url'">
-							<input type="text" ng-model="picker.typeData.url" localize="placeholder" placeholder="@urlPicker_urlPlaceholder" />
+							<input type="url" ng-model="picker.typeData.url" localize="placeholder" placeholder="@urlPicker_urlPlaceholder" />
 							<a href class="delete-icon url-delete" ng-click="resetType('url', picker)"><i class="icon icon-delete" ng-show="picker.typeData.url"></i></a>
 						</div>
 						<div ng-show="picker.type == 'content'">
