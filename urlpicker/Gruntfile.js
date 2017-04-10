@@ -79,7 +79,7 @@ module.exports = function(grunt) {
       dll: {
         expand: true,
         flatten: true,
-        cwd: 'src/UrlPicker.Umbraco/bin/Debug/',
+        cwd: 'src/UrlPicker.Umbraco/bin/Release/',
         src: '**',
         dest: '<%= dest %>/bin/'
       },
@@ -125,8 +125,8 @@ module.exports = function(grunt) {
         dest: '<%= basePath %>/views/'
       },
       dll: {
-        cwd: 'src/UrlPicker.Umbraco/bin/Debug/',
-        src: 'UrlPicker.dll',
+        cwd: 'src/UrlPicker.Umbraco/bin/Release/',
+        src: ['UrlPicker.dll', 'UrlPicker.pdb'],
         dest: '<%= dest %>/bin/',
         expand: true
       },
@@ -228,7 +228,7 @@ module.exports = function(grunt) {
       dist: {
         src: ['src/UrlPicker.Umbraco/UrlPicker.Umbraco.csproj'],
         options: {
-          projectConfiguration: 'Debug',
+          projectConfiguration: 'Release',
           targets: ['Clean', 'Rebuild'],
         }
       }
