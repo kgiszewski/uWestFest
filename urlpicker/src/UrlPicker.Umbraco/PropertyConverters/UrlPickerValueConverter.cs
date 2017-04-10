@@ -1,14 +1,14 @@
-﻿using System;
-using UrlPicker.Umbraco.Extensions;
-using Newtonsoft.Json;
-using Umbraco.Core;
-using Umbraco.Web;
-using Umbraco.Core.Models.PublishedContent;
-using Umbraco.Core.PropertyEditors;
-using Umbraco.Core.Logging;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Umbraco.Core;
+using Umbraco.Core.Logging;
+using Umbraco.Core.Models.PublishedContent;
+using Umbraco.Core.PropertyEditors;
+using Umbraco.Web;
 using UrlPicker.Umbraco.Cache;
+using UrlPicker.Umbraco.Extensions;
 using UrlPicker.Umbraco.Helpers;
 
 namespace UrlPicker.Umbraco.PropertyConverters
@@ -64,6 +64,15 @@ namespace UrlPicker.Umbraco.PropertyConverters
                                     picker.Url = picker.TypeData.Content.Url;
                                     picker.UrlAbsolute = picker.TypeData.Content.UrlAbsolute();
                                     picker.Name = (picker.Meta.Title.IsNullOrWhiteSpace()) ? picker.TypeData.Content.Name : picker.Meta.Title;
+
+                                    if (!picker.TypeData.Anchor.IsNullOrWhiteSpace())
+                                    {
+                                        if (!picker.TypeData.Anchor.StartsWith("#"))
+                                            picker.TypeData.Anchor = "#" + picker.TypeData.Anchor;
+
+                                        picker.Url += picker.TypeData.Anchor;
+                                        picker.UrlAbsolute += picker.TypeData.Anchor;
+                                    }
                                 }
                                 break;
 

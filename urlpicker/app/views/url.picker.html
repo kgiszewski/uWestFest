@@ -45,6 +45,10 @@
 							<a ng-click="openTreePicker('content', picker)" class="select" prevent-default><localize key="urlPicker_select">Select</localize>…</a>
 							<span class="truncate"><i class="icon {{picker.content.icon}}"></i> {{picker.content.name}}</span>
 							<a href class="delete-icon" ng-click="resetType('content', picker)" ng-show="picker.typeData.contentId > 0"><i class="icon icon-delete"></i></a>
+                            <div ng-show="picker.typeData.contentId > 0" class="content-anchor">
+                                <a ng-click="picker.$showAnchor = true" ng-show="!picker.$showAnchor && !picker.typeData.anchor" class="select" prevent-default><localize key="urlPicker_anchorLink">Link to an anchor</localize></a>
+                                <input type="text" ng-model="picker.typeData.anchor" localize="placeholder" placeholder="@urlPicker_anchorPlaceholder" ng-show="picker.$showAnchor || picker.typeData.anchor">
+                            </div>
 						</div>
 						<div ng-show="picker.type == 'media'">
 							<a ng-click="openTreePicker('media', picker)" class="select" prevent-default><localize key="urlPicker_select">Select</localize>…</a>

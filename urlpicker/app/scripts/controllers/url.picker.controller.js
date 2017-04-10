@@ -17,7 +17,9 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
         var index = $scope.pickers.indexOf(picker);
         if (type == "content") {
             $scope.pickers[index].typeData.contentId = null;
+            $scope.pickers[index].typeData.anchor = null;
             $scope.pickers[index].content = null;
+            $scope.pickers[index].$showAnchor = false;
         } else if (type == "media") {
             $scope.pickers[index].typeData.mediaId = null;
             $scope.pickers[index].media = null;

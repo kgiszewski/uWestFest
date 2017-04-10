@@ -14,5 +14,7 @@
     <key alias="media">Media</key>
     <key alias="select">Select</key>
     <key alias="urlPlaceholder">eg. http://, https:// or www.</key>
+    <key alias="anchorLink">Link to an anchor</key>
+    <key alias="anchorPlaceholder">e.g. #about</key>
   </area>
 </language>
