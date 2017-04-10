@@ -13,7 +13,7 @@
     <key alias="content">Umbraco</key>
     <key alias="media">Media</key>
     <key alias="select">Vybrat</key>
-    <key alias="urlPlaceholder">např. http://, https:// or www.</key>
+    <key alias="urlPlaceholder">např. http://, https:// nebo www.</key>
     <key alias="anchorLink">Odkazovat na kotvu</key>
     <key alias="anchorPlaceholder">např. #about</key>
   </area>
