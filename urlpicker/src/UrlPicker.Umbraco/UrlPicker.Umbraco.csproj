@@ -234,6 +234,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Helpers\ConverterHelper.cs" />
+    <Compile Include="Helpers\UrlPickerTypesStringEnumConverter.cs" />
     <Compile Include="Models\Meta.cs" />
     <Compile Include="Models\TypeData.cs" />
     <Compile Include="Models\UrlPicker.cs" />

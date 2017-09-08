@@ -1,4 +1,5 @@
-﻿using Umbraco.Core.Models;
+﻿using System.Collections.Generic;
+using Umbraco.Core.Models;
 
 namespace UrlPicker.Umbraco.Models
 {
@@ -9,5 +10,6 @@ namespace UrlPicker.Umbraco.Models
         public IPublishedContent Content { get; set; }
         public int? MediaId { get; set; }
         public IPublishedContent Media { get; set; }
+        public IDictionary<string, string> DataTypeValues { get; set; }
     }
 }

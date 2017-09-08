@@ -39,7 +39,8 @@ namespace UrlPicker.Umbraco.PropertyConverters
                         sourceString = string.Format("[{0}]", sourceString);
                     }
 
-                    var pickers = JsonConvert.DeserializeObject<IEnumerable<Models.UrlPicker>>(sourceString);
+                    var settings = new JsonSerializerSettings { Converters = new JsonConverter[] { new UrlPickerTypesStringEnumConverter(),  } };
+                    var pickers = JsonConvert.DeserializeObject<IEnumerable<Models.UrlPicker>>(sourceString, settings);
 
                     var helper = new UmbracoHelper(UmbracoContext.Current);
 
