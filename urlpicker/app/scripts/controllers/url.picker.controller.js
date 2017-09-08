@@ -1,4 +1,4 @@
-angular.module('umbraco').controller('UrlPickerController', function ($scope, $timeout, dialogService, entityResource, mediaHelper, angularHelper, iconHelper, localizationService) {
+angular.module('umbraco').controller('UrlPickerController', function ($scope, $timeout, dialogService, entityResource, mediaHelper, angularHelper, iconHelper, localizationService, urlPickerService) {
 
     var currentDialog = null;
     var alreadyDirty = false;
