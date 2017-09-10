@@ -64,7 +64,7 @@
 								</span>
 							</div>
 						</div>
-						<div ng-show="picker.type == type.alias" ng-repeat="type in model.config.additionalTypes">
+						<div ng-show="picker.customType == type.alias" ng-repeat="type in model.config.additionalTypes">
 							<umb-editor ng-if="picker.propertyModels[type.alias]" model="picker.propertyModels[type.alias]"></umb-editor>
 						</div>
 					</div>

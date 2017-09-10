@@ -15,6 +15,9 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
     $scope.switchType = function (type, picker) {
         var index = $scope.pickers.indexOf(picker);
         $scope.pickers[index].type = type;
+        if ($scope.isAdditionalType(picker)) {
+          $scope.pickers[index].customType = type;
+        }
     }
 
     $scope.resetType = function (type, picker) {

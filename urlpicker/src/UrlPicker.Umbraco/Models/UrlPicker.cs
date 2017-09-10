@@ -5,6 +5,7 @@ namespace UrlPicker.Umbraco.Models
     public class UrlPicker
     {
         public UrlPickerTypes Type { get; set; }
+        public string CustomType { get; set; }
         public Meta Meta { get; set; }
         public TypeData TypeData { get; set;}
         public string Url { get; set; }
