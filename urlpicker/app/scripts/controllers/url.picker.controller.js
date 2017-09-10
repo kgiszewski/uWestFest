@@ -125,7 +125,7 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
                 title = metaTitle || picker.typeData.url;
             }
             if ($scope.isAdditionalType(picker.type)) {
-              title = metaTitle || picker.propertyModels[picker.type].value;
+              title = metaTitle || picker.propertyModels[picker.customType].value;
             }
         }
 
@@ -150,7 +150,7 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
             }
         }
         if ($scope.isAdditionalType(picker.type)) {
-          var val = picker.propertyModels[picker.type] ? picker.propertyModels[picker.type].value : '';
+          var val = picker.propertyModels[picker.customType] ? picker.propertyModels[picker.customType].value : '';
           if (!isNullOrEmpty(val)) { // this isn't always an accurate check, don't know what the datatype considers empty
             return false;
           }
