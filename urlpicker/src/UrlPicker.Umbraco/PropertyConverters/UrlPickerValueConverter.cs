@@ -9,6 +9,7 @@ using Umbraco.Core.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using UrlPicker.Umbraco.Cache;
+using UrlPicker.Umbraco.CustomEntities;
 using UrlPicker.Umbraco.Helpers;
 
 namespace UrlPicker.Umbraco.PropertyConverters
@@ -74,6 +75,23 @@ namespace UrlPicker.Umbraco.PropertyConverters
                                     picker.Url = picker.TypeData.Media.Url;
                                     picker.UrlAbsolute = picker.TypeData.Media.Url();
                                     picker.Name = (picker.Meta.Title.IsNullOrWhiteSpace()) ? picker.TypeData.Media.Name : picker.Meta.Title;
+                                }
+                                break;
+
+                            case Models.UrlPicker.UrlPickerTypes.Custom:
+                                if (picker.TypeData.DataTypeValues.Keys.Contains(picker.CustomType))
+                                {
+                                    var provider = new CustomEntityService().GetProvider(propertyType.ContentType.Alias, propertyType.PropertyTypeAlias, propertyType.DataTypeId, picker.CustomType);
+                                    if (provider != null)
+                                    {
+                                        var entity = provider.GetEntity(picker.TypeData.DataTypeValues[picker.CustomType]);
+                                        if (entity != null)
+                                        {
+                                            picker.Url = entity.Url;
+                                            picker.UrlAbsolute = entity.Url;
+                                            picker.Name = (picker.Meta.Title.IsNullOrWhiteSpace() ? entity.Heading : picker.Meta.Title);
+                                        }
+                                    }
                                 }
                                 break;
 
