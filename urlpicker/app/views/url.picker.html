@@ -2,7 +2,7 @@
 	<ul ui-sortable="sortableOptions" ng-model="pickers" class="picker-wrapper" ng-show="!showAddButton()">
 		<li ng-repeat="picker in pickers" ng-class="{ 'unsortable': !model.config.multipleItems || pickers.length <= 1 }">
 			<div class="panel panel-default" ng-class="{ 'dimmed': picker.disabled, 'collapsed': !picker.active }">
-                
+
                 <div ng-click="editItem(picker)" class="panel-heading clearfix">
                     <span class="caret" ng-show="model.config.multipleItems"></span>
                     <span class="truncate"><i class="icon {{getPickerIcon(picker)}}" ng-show="model.config.usePickerIcons"></i>{{getPickerHeading(picker)}}</span>
@@ -34,7 +34,7 @@
 						<li ng-class="{active: picker.type == 'media'}" ng-hide="model.config.hideMedia">
 							<a ng-click="switchType('media', picker)" href="#" prevent-default><localize key="urlPicker_media">Media</localize></a>
 						</li>
-						<li ng-class="{active: picker.type == type.alias }" ng-repeat="type in model.config.additionalTypes">
+						<li ng-class="{active: picker.customType == type.alias }" ng-repeat="type in model.config.additionalTypes">
 							<a ng-click="switchType(type.alias, picker)" href="#" prevent-default>{{type.name}}</a>
 						</li>
 					</ul>
@@ -52,12 +52,12 @@
 						<div ng-show="picker.type == 'media'">
 							<a ng-click="openTreePicker('media', picker)" class="select" prevent-default><localize key="urlPicker_select">Select</localize>…</a>
                             <span class="truncate"><i class="icon {{picker.media.icon}}"></i> {{picker.media.name}}</span>
-                            
+
 							<a href class="delete-icon" ng-click="resetType('media', picker)" ng-show="picker.typeData.mediaId > 0"><i class="icon icon-delete"></i></a>
-                            
+
 							<div class="thumbnail" ng-show="model.config.mediaPreview">
 								<img ng-src="{{picker.media.thumbnail}}" alt="" ng-show="picker.media.thumbnail">
-								
+
 								<span class="icon-holder" ng-hide="picker.media.thumbnail">
 									<i class="icon {{picker.media.icon}} large" ></i>
 									<small>{{picker.media.name}}</small>
