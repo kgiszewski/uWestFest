@@ -125,7 +125,7 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
                 title = metaTitle || picker.typeData.url;
             }
             if ($scope.isAdditionalType(picker.type)) {
-              title = metaTitle || picker.propertyModels[picker.customType].value;
+              title = metaTitle || picker.propertyModels[picker.type].heading || picker.propertyModels[picker.type].value;
             }
         }
 
@@ -498,16 +498,33 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
             if (!obj.typeData.hasOwnProperty('dataTypeValues')) {
               obj.typeData.dataTypeValues = { };
             }
-            urlPickerService.getAllPropertyEditors().then(function (d) { // TODO: This is cached, right?
-              $scope.model.config.additionalTypes.forEach(function (t) {
-                var dataType = _.find(d, function (dt) { return dt.id == t.dataTypeId; });
-                if (dataType) {
-                  obj.propertyModels[t.alias] = {
-                    view: dataType.view,
-                    config: dataType.config,
-                    value: obj.typeData.dataTypeValues && obj.typeData.dataTypeValues[t.alias] ? obj.typeData.dataTypeValues[t.alias] : '' // set initial value from persisted data
+            urlPickerService.getAllPropertyEditors().then(function (allDataTypes) { // TODO: This is cached, right?
+              $scope.model.config.additionalTypes.forEach(function (additionalType) {
+                var configuredDataType = _.find(allDataTypes, function (dt) { return dt.id == additionalType.dataTypeId; });
+                if (configuredDataType) {
+                  obj.propertyModels[additionalType.alias] = {
+                    view: configuredDataType.view,
+                    config: configuredDataType.config,
+                    value: obj.typeData.dataTypeValues && obj.typeData.dataTypeValues[additionalType.alias] ? obj.typeData.dataTypeValues[additionalType.alias] : '' // set initial value from persisted data
                   };
-                  obj.propertyModels[t.alias].config.dataTypeId = dataType.id;
+                  obj.propertyModels[additionalType.alias].config.dataTypeId = configuredDataType.id;
+
+                  urlPickerService.getEntityFromCustomType(editorState.current.id, "wat", configuredDataType.id, additionalType.alias, obj.propertyModels[additionalType.alias].value).then(function (d) {
+                    obj.propertyModels[additionalType.alias].heading = d.heading;
+                  });
+
+                  // watch for changes inside each custom type so we can refresh the Heading
+                  // TODO: should probably find a better way to handle
+                  var unsubscribe = $scope.$watch(function () { return obj.propertyModels[additionalType.alias].value; }, function (newVal, oldVal) {
+                    if (newVal !== oldVal) {
+                      urlPickerService.getEntityFromCustomType(editorState.current.id, "wat", configuredDataType.id, additionalType.alias, obj.propertyModels[additionalType.alias].value).then(function (d) {
+                        obj.propertyModels[additionalType.alias].heading = d.heading;
+                      });
+                    }
+                  });
+                  $scope.$on('$destroy', function () {
+                    unsubscribe();
+                  });
                 }
               });
             });

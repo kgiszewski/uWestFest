@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Web.Http;
 using Umbraco.Web.WebApi;
+using UrlPicker.Umbraco.CustomEntities;
+using UrlPicker.Umbraco.CustomEntities.Models;
 
 namespace UrlPicker.Umbraco
 {
@@ -29,6 +32,14 @@ namespace UrlPicker.Umbraco
             }
             return ret;
         }
-    }
 
+        [HttpPost]
+        public CustomEntity GetEntityFromCustomType(GetEntityPostModel obj)
+        {
+            var contentTypeAlias = Services.ContentService.GetById(obj.nodeId).ContentType.Alias;
+            var customProvider = new CustomEntityService().GetProvider(contentTypeAlias, obj.hostPropertyAlias, obj.dataTypeId, obj.typeAlias);
+            if (customProvider == null) return null;
+            return customProvider.GetEntity(obj.value);
+        }
+    }
 }
