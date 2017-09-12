@@ -509,14 +509,16 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
                   };
                   obj.propertyModels[additionalType.alias].config.dataTypeId = configuredDataType.id;
 
-                  urlPickerService.getEntityFromCustomType(editorState.current.id, "wat", configuredDataType.id, additionalType.alias, obj.propertyModels[additionalType.alias].value).then(function (d) {
-                    obj.propertyModels[additionalType.alias].heading = d.heading;
-                  });
+                  if (obj.propertyModels[additionalType.alias].value && obj.propertyModels[additionalType.alias].value.length) {
+                    urlPickerService.getEntityFromCustomType(editorState.current.id, "wat", configuredDataType.id, additionalType.alias, obj.propertyModels[additionalType.alias].value).then(function (d) {
+                      obj.propertyModels[additionalType.alias].heading = d.heading;
+                    });
+                  }
 
                   // watch for changes inside each custom type so we can refresh the Heading
                   // TODO: should probably find a better way to handle
                   var unsubscribe = $scope.$watch(function () { return obj.propertyModels[additionalType.alias].value; }, function (newVal, oldVal) {
-                    if (newVal !== oldVal) {
+                    if (newVal && newVal.length && newVal !== oldVal) {
                       urlPickerService.getEntityFromCustomType(editorState.current.id, "wat", configuredDataType.id, additionalType.alias, obj.propertyModels[additionalType.alias].value).then(function (d) {
                         obj.propertyModels[additionalType.alias].heading = d.heading;
                       });
