@@ -125,7 +125,7 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
                 title = metaTitle || picker.typeData.url;
             }
             if ($scope.isAdditionalType(picker.type)) {
-              title = metaTitle || picker.propertyModels[picker.type].heading || picker.propertyModels[picker.type].value;
+              title = metaTitle || picker.propertyModels[picker.customType].heading || picker.propertyModels[picker.customType].value;
             }
         }
 
