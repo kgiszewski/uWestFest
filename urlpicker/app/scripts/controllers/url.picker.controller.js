@@ -371,13 +371,6 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
             $scope.model.config.multipleItems = true;
         }
 
-        // default type
-        if ($scope.model.config.defaultType) {
-            defaultType = $scope.model.config.defaultType;
-        } else {
-            defaultType = "content";
-        }
-
         // start with add-button
         if (!$scope.model.config.startWithAddButton || $scope.model.config.startWithAddButton == 0) {
             $scope.model.config.startWithAddButton = false;
