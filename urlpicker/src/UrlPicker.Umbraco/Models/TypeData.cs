@@ -9,5 +9,6 @@ namespace UrlPicker.Umbraco.Models
         public IPublishedContent Content { get; set; }
         public int? MediaId { get; set; }
         public IPublishedContent Media { get; set; }
+        public string Anchor { get; set; }
     }
 }
