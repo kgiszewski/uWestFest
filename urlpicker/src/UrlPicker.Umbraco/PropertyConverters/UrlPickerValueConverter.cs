@@ -84,7 +84,7 @@ namespace UrlPicker.Umbraco.PropertyConverters
                                     var provider = new CustomEntityService().GetProvider(propertyType.ContentType.Alias, propertyType.PropertyTypeAlias, propertyType.DataTypeId, picker.CustomType);
                                     if (provider != null)
                                     {
-                                        var entity = provider.GetEntity(picker.TypeData.DataTypeValues[picker.CustomType]);
+                                        var entity = provider.GetEntity(picker.TypeData.DataTypeValues[picker.CustomType], true);
                                         if (entity != null)
                                         {
                                             picker.Url = entity.Url;

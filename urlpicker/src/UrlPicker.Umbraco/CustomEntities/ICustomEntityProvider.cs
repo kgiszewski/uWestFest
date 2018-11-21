@@ -5,6 +5,6 @@ namespace UrlPicker.Umbraco.CustomEntities
     public interface ICustomEntityProvider
     {
         bool CanProviderFor(string contentTypeAlias, string propertyAlias, int dataTypeId, string customTypeAlias);
-        CustomEntity GetEntity(string value);
+        CustomEntity GetEntity(string value, bool isFrontEnd);
     }
 }

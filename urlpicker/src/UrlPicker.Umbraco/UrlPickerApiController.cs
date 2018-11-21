@@ -39,7 +39,7 @@ namespace UrlPicker.Umbraco
             var contentTypeAlias = Services.ContentService.GetById(obj.nodeId).ContentType.Alias;
             var customProvider = new CustomEntityService().GetProvider(contentTypeAlias, obj.hostPropertyAlias, obj.dataTypeId, obj.typeAlias);
             if (customProvider == null || string.IsNullOrEmpty(obj.value)) return null;
-            return customProvider.GetEntity(obj.value);
+            return customProvider.GetEntity(obj.value, false);
         }
     }
 }
