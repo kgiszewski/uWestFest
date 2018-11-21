@@ -1,4 +1,4 @@
-angular.module('umbraco').controller('UrlPickerController', function ($scope, $timeout, dialogService, entityResource, mediaHelper, angularHelper, iconHelper, localizationService) {
+angular.module('umbraco').controller('UrlPickerController', function ($scope, $timeout, dialogService, entityResource, mediaHelper, angularHelper, iconHelper, localizationService, urlPickerService, editorState) {
 
     var currentDialog = null;
     var alreadyDirty = false;
@@ -8,9 +8,16 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
     //get a reference to the current form
     $scope.form = $scope.form || angularHelper.getCurrentForm($scope);
 
+    $scope.isAdditionalType = function (type) {
+      return ["content", "media", "url"].indexOf(type) == -1;
+    };
+
     $scope.switchType = function (type, picker) {
         var index = $scope.pickers.indexOf(picker);
         $scope.pickers[index].type = type;
+        if ($scope.isAdditionalType(picker)) {
+          $scope.pickers[index].customType = type;
+        }
     }
 
     $scope.resetType = function (type, picker) {
@@ -117,6 +124,9 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
             if (picker.type == "url") {
                 title = metaTitle || picker.typeData.url;
             }
+            if ($scope.isAdditionalType(picker.type)) {
+              title = metaTitle || picker.propertyModels[picker.customType].heading || picker.propertyModels[picker.customType].value;
+            }
         }
 
         return title;
@@ -138,6 +148,12 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
             if (!isNullOrEmpty(picker.typeData.url)) {
                 return false;
             }
+        }
+        if ($scope.isAdditionalType(picker.type)) {
+          var val = picker.propertyModels[picker.customType] ? picker.propertyModels[picker.customType].value : '';
+          if (!isNullOrEmpty(val)) { // this isn't always an accurate check, don't know what the datatype considers empty
+            return false;
+          }
         }
         return true;
     }
@@ -469,6 +485,45 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
                 });
                 //Todo: handle scenario where selected media has been deleted
             }
+
+            // init property models for each picker and sync persisted values
+            obj.propertyModels = { };
+            if (!obj.typeData.hasOwnProperty('dataTypeValues')) {
+              obj.typeData.dataTypeValues = { };
+            }
+            urlPickerService.getAllPropertyEditors().then(function (allDataTypes) { // TODO: This is cached, right?
+              $scope.model.config.additionalTypes.forEach(function (additionalType) {
+                var configuredDataType = _.find(allDataTypes, function (dt) { return dt.id == additionalType.dataTypeId; });
+                if (configuredDataType) {
+                  obj.propertyModels[additionalType.alias] = {
+                    view: configuredDataType.view,
+                    config: configuredDataType.config,
+                    value: obj.typeData.dataTypeValues && obj.typeData.dataTypeValues[additionalType.alias] ? obj.typeData.dataTypeValues[additionalType.alias] : '' // set initial value from persisted data
+                  };
+                  obj.propertyModels[additionalType.alias].config.dataTypeId = configuredDataType.id;
+
+                  if (obj.propertyModels[additionalType.alias].value && obj.propertyModels[additionalType.alias].value.length) {
+                    urlPickerService.getEntityFromCustomType(editorState.current.id, "wat", configuredDataType.id, additionalType.alias, obj.propertyModels[additionalType.alias].value).then(function (d) {
+                      obj.propertyModels[additionalType.alias].heading = d.heading;
+                    });
+                  }
+
+                  // watch for changes inside each custom type so we can refresh the Heading
+                  // TODO: should probably find a better way to handle
+                  var unsubscribe = $scope.$watch(function () { return obj.propertyModels[additionalType.alias].value; }, function (newVal, oldVal) {
+                    if (newVal && newVal.length && newVal !== oldVal) {
+                      urlPickerService.getEntityFromCustomType(editorState.current.id, "wat", configuredDataType.id, additionalType.alias, obj.propertyModels[additionalType.alias].value).then(function (d) {
+                        obj.propertyModels[additionalType.alias].heading = d.heading;
+                      });
+                    }
+                  });
+                  $scope.$on('$destroy', function () {
+                    unsubscribe();
+                  });
+                }
+              });
+            });
+
         });
         
     }
@@ -480,6 +535,14 @@ angular.module('umbraco').controller('UrlPickerController', function ($scope, $t
             //delete v.disabled;
             delete v.media;
             delete v.content;
+
+            // sync the propertyModel.value to dataTypeValue for each picker
+            $scope.model.config.additionalTypes.forEach(function (type) {
+              if (v.propertyModels.hasOwnProperty(type.alias)) {
+                v.typeData.dataTypeValues[type.alias] = v.propertyModels[type.alias].value;
+              }
+            });
+            delete v.propertyModels;
         });
 
         $scope.model.value = angular.toJson(array, true);

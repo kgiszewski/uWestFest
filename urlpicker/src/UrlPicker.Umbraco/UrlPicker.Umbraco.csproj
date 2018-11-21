@@ -232,11 +232,19 @@
     <Compile Include="Cache\Events.cs" />
     <Compile Include="Cache\LocalCache.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="CustomEntities\CustomEntityProvidersResolver.cs" />
+    <Compile Include="CustomEntities\CustomEntityService.cs" />
+    <Compile Include="CustomEntities\ICustomEntityProvider.cs" />
+    <Compile Include="CustomEntities\Models\CustomTypeEntity.cs" />
+    <Compile Include="CustomEntities\Models\GetEntityPostModel.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Helpers\ConverterHelper.cs" />
+    <Compile Include="Helpers\UrlPickerTypesStringEnumConverter.cs" />
     <Compile Include="Models\Meta.cs" />
     <Compile Include="Models\TypeData.cs" />
     <Compile Include="Models\UrlPicker.cs" />
+    <Compile Include="Startup.cs" />
+    <Compile Include="UrlPickerApiController.cs" />
     <Compile Include="PropertyConverters\UrlPickerValueConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
