@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language alias="cs" intName="Czech" localName="česky" lcid="5" culture="cs">
+  <area alias="urlPicker">
+    <key alias="addItem">Přidat</key>
+    <key alias="enable">Aktivovat</key>
+    <key alias="disable">Deaktivovat</key>
+    <key alias="add">Přidat</key>
+    <key alias="move">Přesunout</key>
+    <key alias="remove">Odsranit</key>
+    <key alias="title">Název</key>
+    <key alias="newWindow">Otevřít do nového okna?</key>
+    <key alias="url">URL</key>
+    <key alias="content">Umbraco</key>
+    <key alias="media">Media</key>
+    <key alias="select">Vybrat</key>
+    <key alias="urlPlaceholder">např. http://, https:// nebo www.</key>
+    <key alias="anchorLink">Odkazovat na kotvu</key>
+    <key alias="anchorPlaceholder">např. #about</key>
+  </area>
+</language>
